@@ -28,12 +28,6 @@ data class MapResponse(
 	@field:SerializedName("gambar_ndvi")
 	val gambarNdvi: String,
 
-	@field:SerializedName("lebar")
-	val lebar: Int,
-
-	@field:SerializedName("tinggi")
-	val tinggi: Int,
-
 	@field:SerializedName("created_at")
 	val createdAt: String,
 
