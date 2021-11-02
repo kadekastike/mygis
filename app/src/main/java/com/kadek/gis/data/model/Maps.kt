@@ -9,8 +9,6 @@ data class Maps(
     var ne_longitude: Double,
     var gambar_taksasi: String,
     var gambar_ndvi: String,
-    var lebar: Int,
-    var tinggi: Int,
     var created_at: String,
     var updated_at: String
 )
