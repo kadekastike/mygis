@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             )
             executor.execute {
                 images.clear()
-                val baseUrl = "http://aaf7-116-206-39-95.ngrok.io/storage/"
+                val baseUrl = "http://3d6b-182-3-104-60.ngrok.io/storage/"
 
                 val requestOptions = RequestOptions().override(100)
                     .downsample(DownsampleStrategy.CENTER_INSIDE)
@@ -138,8 +138,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
             @Synchronized
             override fun getTileUrl(x: Int, y: Int, z: Int): URL? {
-                var map_url = "http://tile.openweathermap.org/map/precipitation/%d/%d/%d.png?appid=8c1c230db9d1ef99bf33660785575a51"
-                val s = String.format(Locale.US, map_url, z, x, y)
+                val mapUrl = "https://tile.openweathermap.org/map/precipitation/%d/%d/%d.png?appid=8c1c230db9d1ef99bf33660785575a51"
+                val s = String.format(Locale.US, mapUrl, z, x, y)
 
                 var url: URL? = null
                 url = try {
@@ -154,6 +154,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val state = pref.getBoolean(SettingActivity.SHOW_PRECIPITATION, true)
 
         if (state) {
+            Glide.with(this)
+                .load(R.drawable.legend3)
+                .into(binding.legend)
             prepTiles = mMap.addTileOverlay(TileOverlayOptions().tileProvider(tileProvider))!!
         }
 
