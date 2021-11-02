@@ -33,8 +33,6 @@ class HomeDataRepository private constructor(private val remoteDataSource: Remot
                             response.neLongitude,
                             response.gambarTaksasi,
                             response.gambarNdvi,
-                            response.lebar,
-                            response.tinggi,
                             response.createdAt,
                             response.updatedAt
                         )
@@ -60,8 +58,6 @@ class HomeDataRepository private constructor(private val remoteDataSource: Remot
                         mapResponse.neLongitude,
                         mapResponse.gambarTaksasi,
                         mapResponse.gambarNdvi,
-                        mapResponse.lebar,
-                        mapResponse.tinggi,
                         mapResponse.createdAt,
                         mapResponse.updatedAt
                     )
