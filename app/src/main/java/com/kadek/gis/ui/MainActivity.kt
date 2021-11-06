@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -25,6 +26,7 @@ import com.kadek.gis.R
 import com.kadek.gis.databinding.ActivityMainBinding
 import com.kadek.gis.utils.ViewModelFactory
 import com.kadek.gis.viewmodel.MainViewModel
+import com.kadek.gis.viewmodel.WeatherViewModel
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.*
@@ -34,6 +36,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     companion object {
         const val EXTRA_DATA = "extra_data"
+
     }
 
     private val images: MutableList<BitmapDescriptor> = ArrayList()
@@ -43,6 +46,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var prepTiles: TileOverlay
     private lateinit var pref: SharedPreferences
     private var currentEntry = 0
+    var latitude: Double = 0.0
+    var longitude: Double = 0.0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +59,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
 
     }
 
@@ -92,13 +99,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.progressBar.bringToFront()
         binding.progressBar.visibility = View.VISIBLE
         viewModel.getMapDetail(dataId).observe(this, { map ->
+            latitude = map.sw_latitude
+            longitude = map.sw_longitude
             val newarkBounds = LatLngBounds(
                 LatLng(map.sw_latitude, map.sw_longitude), //south west (barat daya)
                 LatLng(map.ne_latitude, map.ne_longitude) // north east (timur laut)
             )
             executor.execute {
                 images.clear()
-                val baseUrl = "http://3d6b-182-3-104-60.ngrok.io/storage/"
+                val baseUrl = "http://ff98-116-206-42-127.ngrok.io/storage/"
 
                 val requestOptions = RequestOptions().override(100)
                     .downsample(DownsampleStrategy.CENTER_INSIDE)
@@ -124,6 +133,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 val newarkLatLng = LatLng(map.sw_latitude, map.sw_longitude)
 
+
                 handler.post {
                     groundOverlay = mMap.addGroundOverlay(GroundOverlayOptions()
                         .positionFromBounds(newarkBounds)
@@ -133,6 +143,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     binding.progressBar.visibility = View.GONE
                 }
             }
+            val weatherViewModel = ViewModelProvider(this, factory)[WeatherViewModel::class.java]
+
+            weatherViewModel.getWeather(map.sw_latitude, map.sw_longitude)
+
+            weatherViewModel.humidity.observe(this, {
+                    Toast.makeText(this, "Humidity: " + it.humidity.toString() + "%", Toast.LENGTH_LONG).show()
+            })
+            weatherViewModel.currentWeather.observe(this, {
+                it.map {
+                    Toast.makeText(this, it?.description, Toast.LENGTH_LONG).show()
+                }
+            })
         })
 
         val tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
@@ -168,4 +190,5 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         Log.d("currentEntry", currentEntry.toString())
         overlay.setImage(images[currentEntry])
     }
+
 }

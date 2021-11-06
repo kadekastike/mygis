@@ -2,7 +2,7 @@ package com.kadek.gis.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.kadek.gis.MapResponse
+import com.kadek.gis.data.remote.response.MapResponse
 import com.kadek.gis.data.model.Maps
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO

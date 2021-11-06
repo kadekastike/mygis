@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.kadek.gis.data.repository.HomeDataRepository
 import com.kadek.gis.viewmodel.MainViewModel
+import com.kadek.gis.viewmodel.WeatherViewModel
 
 class ViewModelFactory(private val homeDataRepository: HomeDataRepository) :
     ViewModelProvider.NewInstanceFactory() {
@@ -20,8 +21,8 @@ class ViewModelFactory(private val homeDataRepository: HomeDataRepository) :
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return when {
                 modelClass.isAssignableFrom(MainViewModel::class.java) -> MainViewModel(homeDataRepository) as T
+                modelClass.isAssignableFrom(WeatherViewModel::class.java) -> WeatherViewModel() as T
                 else -> throw  Throwable("Unknown ViewModel" + modelClass.name)
             }
-
         }
     }

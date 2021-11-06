@@ -1,6 +1,6 @@
 package com.kadek.gis.data.repository
 
-import com.kadek.gis.MapResponse
+import com.kadek.gis.data.remote.response.MapResponse
 import com.kadek.gis.data.remote.api.ApiConfig
 import com.kadek.gis.utils.IdlingResource.idlingResource
 import retrofit2.await

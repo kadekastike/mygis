@@ -1,7 +1,6 @@
 package com.kadek.gis.data.remote.response
 
 import com.google.gson.annotations.SerializedName
-import com.kadek.gis.MapResponse
 
 data class DataResponse<T>(
 
