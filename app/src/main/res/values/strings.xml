@@ -4,6 +4,6 @@
     <string name="choose_data">Select Data</string>
     <string name="title">title</string>
     <string name="switch_image">Switch Image</string>
-    <string name="show_prep">Show precipitation</string>
+    <string name="show_prep">Show precipitation layer</string>
     <string name="setting">Setting</string>
 </resources>

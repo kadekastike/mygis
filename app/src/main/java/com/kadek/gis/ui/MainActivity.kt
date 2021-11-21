@@ -1,5 +1,6 @@
 package com.kadek.gis.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -22,6 +23,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.kadek.gis.R
 import com.kadek.gis.databinding.ActivityMainBinding
 import com.kadek.gis.utils.ViewModelFactory
@@ -84,6 +86,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
@@ -107,7 +110,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             )
             executor.execute {
                 images.clear()
-                val baseUrl = "http://ff98-116-206-42-127.ngrok.io/storage/"
+                val baseUrl = "http://986c-116-206-43-85.ngrok.io/storage/"
 
                 val requestOptions = RequestOptions().override(100)
                     .downsample(DownsampleStrategy.CENTER_INSIDE)
@@ -148,11 +151,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             weatherViewModel.getWeather(map.sw_latitude, map.sw_longitude)
 
             weatherViewModel.humidity.observe(this, {
-                    Toast.makeText(this, "Humidity: " + it.humidity.toString() + "%", Toast.LENGTH_LONG).show()
+                binding.humidityLevel.text = it.humidity.toString() + "%"
             })
             weatherViewModel.currentWeather.observe(this, {
                 it.map {
-                    Toast.makeText(this, it?.description, Toast.LENGTH_LONG).show()
+                    binding.resWeather.text = it?.description
+                    val baseUrl = "http://openweathermap.org/img/wn/"
+                    Glide.with(this)
+                        .load(baseUrl + it?.icon + "@2x.png")
+                        .into(binding.imgWeather)
                 }
             })
         })
@@ -180,6 +187,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 .load(R.drawable.legend3)
                 .into(binding.legend)
             prepTiles = mMap.addTileOverlay(TileOverlayOptions().tileProvider(tileProvider))!!
+        }
+
+        BottomSheetBehavior.from(binding.bottomSheet).apply {
+            peekHeight = 80
+            this.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
     }
