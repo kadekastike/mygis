@@ -54,6 +54,13 @@
         android:background="@drawable/rounded"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_round_remove_24"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center|top"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

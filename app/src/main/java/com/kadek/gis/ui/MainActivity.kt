@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     companion object {
         const val EXTRA_DATA = "extra_data"
-
     }
 
     private val images: MutableList<BitmapDescriptor> = ArrayList()
@@ -48,9 +47,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var prepTiles: TileOverlay
     private lateinit var pref: SharedPreferences
     private var currentEntry = 0
-    var latitude: Double = 0.0
-    var longitude: Double = 0.0
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,8 +57,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -94,7 +88,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val factory = ViewModelFactory.getInstance()
         val viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
-        val dataId = intent.getIntExtra(EXTRA_DATA, 9)
+        val dataId = intent.getIntExtra(EXTRA_DATA, 11)
 
         val executor = Executors.newSingleThreadExecutor()
         val handler = Handler(Looper.getMainLooper())
@@ -102,15 +96,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.progressBar.bringToFront()
         binding.progressBar.visibility = View.VISIBLE
         viewModel.getMapDetail(dataId).observe(this, { map ->
-            latitude = map.sw_latitude
-            longitude = map.sw_longitude
             val newarkBounds = LatLngBounds(
                 LatLng(map.sw_latitude, map.sw_longitude), //south west (barat daya)
                 LatLng(map.ne_latitude, map.ne_longitude) // north east (timur laut)
             )
             executor.execute {
                 images.clear()
-                val baseUrl = "http://986c-116-206-43-85.ngrok.io/storage/"
+                val baseUrl = "http://bbde-116-206-43-99.ngrok.io/storage/"
 
                 val requestOptions = RequestOptions().override(100)
                     .downsample(DownsampleStrategy.CENTER_INSIDE)
@@ -135,7 +127,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 images.add(BitmapDescriptorFactory.fromBitmap(ndvi))
 
                 val newarkLatLng = LatLng(map.sw_latitude, map.sw_longitude)
-
 
                 handler.post {
                     groundOverlay = mMap.addGroundOverlay(GroundOverlayOptions()
@@ -193,7 +184,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             peekHeight = 80
             this.state = BottomSheetBehavior.STATE_COLLAPSED
         }
-
     }
 
     fun switchImage(view: View){
