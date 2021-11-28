@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -102,26 +103,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             )
             executor.execute {
                 images.clear()
-                val baseUrl = "http://bbde-116-206-43-99.ngrok.io/storage/"
 
-                val requestOptions = RequestOptions().override(100)
-                    .downsample(DownsampleStrategy.CENTER_INSIDE)
-                    .skipMemoryCache(true)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-
-                val taksasi = Glide.with(this)
-                    .asBitmap()
-                    .load(baseUrl + map.gambar_taksasi)
-                    .apply(requestOptions)
-                    .submit()
-                    .get()
-
-                val ndvi = Glide.with(this)
-                    .asBitmap()
-                    .load(baseUrl + map.gambar_ndvi)
-                    .apply(requestOptions)
-                    .submit()
-                    .get()
+                val taksasi = getImage(map.gambar_taksasi)
+                val ndvi = getImage(map.gambar_ndvi)
 
                 images.add(BitmapDescriptorFactory.fromBitmap(taksasi))
                 images.add(BitmapDescriptorFactory.fromBitmap(ndvi))
@@ -191,6 +175,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         currentEntry = (currentEntry + 1) % images.size
         Log.d("currentEntry", currentEntry.toString())
         overlay.setImage(images[currentEntry])
+    }
+
+    private fun getImage(address: String) : Bitmap {
+
+        val baseUrl = "http://bbde-116-206-43-99.ngrok.io/storage/"
+
+        return Glide.with(this)
+            .asBitmap()
+            .load(baseUrl + address)
+            .apply(RequestOptions().override(200,200))
+            .submit()
+            .get()
     }
 
 }
