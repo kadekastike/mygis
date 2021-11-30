@@ -27,6 +27,7 @@ class HomeDataRepository private constructor(private val remoteDataSource: Remot
                     for (response in mapResponse) {
                         val map = Maps(response.id,
                             response.name,
+                            response.createdBy,
                             response.swLatitude,
                             response.swLongitude,
                             response.neLatitude,
@@ -52,6 +53,7 @@ class HomeDataRepository private constructor(private val remoteDataSource: Remot
                 override fun onMapDetailReceived(mapResponse: MapResponse) {
                     val mapDetail = Maps(mapResponse.id,
                         mapResponse.name,
+                        mapResponse.createdBy,
                         mapResponse.swLatitude,
                         mapResponse.swLongitude,
                         mapResponse.neLatitude,

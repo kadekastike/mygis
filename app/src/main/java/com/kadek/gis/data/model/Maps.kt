@@ -3,6 +3,7 @@ package com.kadek.gis.data.model
 data class Maps(
     var id: Int,
     var name: String,
+    var created_by: String,
     var sw_latitude: Double,
     var sw_longitude: Double,
     var ne_latitude: Double,

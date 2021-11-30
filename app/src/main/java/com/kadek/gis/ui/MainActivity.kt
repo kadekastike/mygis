@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val factory = ViewModelFactory.getInstance()
         val viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
-        val dataId = intent.getIntExtra(EXTRA_DATA, 11)
+        val dataId = intent.getIntExtra(EXTRA_DATA, 3)
 
         val executor = Executors.newSingleThreadExecutor()
         val handler = Handler(Looper.getMainLooper())
@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 handler.post {
                     groundOverlay = mMap.addGroundOverlay(GroundOverlayOptions()
                         .positionFromBounds(newarkBounds)
-                        .image(images[currentEntry]).anchor(0f, 1f)
+                        .image(images[currentEntry]).anchor(1f, 0f)
                     )
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newarkLatLng, 10f))
                     binding.progressBar.visibility = View.GONE
@@ -179,7 +179,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun getImage(address: String) : Bitmap {
 
-        val baseUrl = "http://bbde-116-206-43-99.ngrok.io/storage/"
+        val baseUrl = "http://efac-110-137-37-44.ngrok.io/storage/"
 
         return Glide.with(this)
             .asBitmap()
@@ -188,5 +188,4 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             .submit()
             .get()
     }
-
 }

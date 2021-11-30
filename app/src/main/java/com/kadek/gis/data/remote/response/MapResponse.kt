@@ -10,6 +10,9 @@ data class MapResponse(
 	@field:SerializedName("name")
 	val name: String,
 
+	@field:SerializedName("created_by")
+	val createdBy: String,
+
 	@field:SerializedName("sw_latitude")
 	val swLatitude: Double,
 

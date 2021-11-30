@@ -9,7 +9,7 @@ class ApiConfig {
     companion object{
         fun getApiService(): MapApiService {
             val retrofit = Retrofit.Builder()
-                .baseUrl("http://bbde-116-206-43-99.ngrok.io/api/")
+                .baseUrl("http://efac-110-137-37-44.ngrok.io/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
             return retrofit.create(MapApiService::class.java)
