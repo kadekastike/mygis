@@ -10,6 +10,9 @@ data class MapResponse(
 	@field:SerializedName("name")
 	val name: String,
 
+	@field:SerializedName("area")
+	val area: String,
+
 	@field:SerializedName("created_by")
 	val createdBy: String,
 

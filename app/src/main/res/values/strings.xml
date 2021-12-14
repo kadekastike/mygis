@@ -3,7 +3,15 @@
     <string name="title_activity_maps">MyGIS</string>
     <string name="choose_data">Select Data</string>
     <string name="title">title</string>
-    <string name="switch_image">Switch Image</string>
+    <string name="switch_image">Switch Overlay</string>
     <string name="show_prep">Show precipitation layer</string>
     <string name="setting">Setting</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bunga_mayang">Bunga Mayang</string>
+    <string name="cinta_manis">Cinta Manis</string>
+    <string name="weather">Weather</string>
+    <string name="ndvi">NDVI</string>
+    <string name="taksasi">Taksasi</string>
+    <string name="job_progress">Job Progress</string>
 </resources>

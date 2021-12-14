@@ -2,6 +2,8 @@ package com.kadek.gis.data.repository
 
 import com.kadek.gis.data.remote.response.MapResponse
 import com.kadek.gis.data.remote.api.ApiConfig
+import com.kadek.gis.data.remote.response.AreaResponse
+import com.kadek.gis.data.remote.response.DailyItem
 import com.kadek.gis.utils.IdlingResource.idlingResource
 import retrofit2.await
 
@@ -14,9 +16,17 @@ class RemoteDataSource {
         }
     }
 
-    suspend fun getMaps(callback: loadMapsCallback) {
+    suspend fun getAreas(callback: loadAreaCallback) {
         idlingResource.increment()
-        ApiConfig.getApiService().getMaps().await().data?.let { maps ->
+        ApiConfig.getApiService().getAreas().await().data?.let { areas ->
+            callback.onAllAreaReceived(areas)
+            idlingResource.decrement()
+        }
+    }
+
+    suspend fun getMaps(areaId : Int, callback: loadMapsCallback) {
+        idlingResource.increment()
+        ApiConfig.getApiService().getMaps(areaId).await().data?.let { maps ->
             callback.onAllMapsReceived(maps)
             idlingResource.decrement()
         }
@@ -28,6 +38,23 @@ class RemoteDataSource {
             callback.onMapDetailReceived(maps)
             idlingResource.decrement()
         }
+    }
+
+    suspend fun getWeather(lat: Double, long: Double, callback: loadWeatherCallback) {
+        idlingResource.increment()
+        ApiConfig.getWeatherApiService().getWeather(lat, long).await().daily?.let { weather ->
+            callback.onAllWeatherReceived(weather)
+            idlingResource.decrement()
+        }
+
+    }
+
+    interface loadWeatherCallback {
+        fun onAllWeatherReceived(weatherResponse: List<DailyItem?>)
+    }
+
+    interface loadAreaCallback {
+        fun onAllAreaReceived(areaResponse: List<AreaResponse>)
     }
 
     interface loadMapsCallback {

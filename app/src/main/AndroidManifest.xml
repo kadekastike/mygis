@@ -16,10 +16,44 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
+            android:name=".ui.layer.ProgressActivity"
+            android:exported="false"
+            android:label="@string/job_progress"
+            android:parentActivityName=".ui.area.ListDataAreaActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
+        <activity
+            android:name=".ui.area.ListDataAreaActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.MainActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".ui.layer.LayerWeather"
+            android:exported="false"
+            android:label="@string/weather"
+            android:parentActivityName=".ui.area.ListDataAreaActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".ui.layer.LayerNDVI"
+            android:exported="false"
+            android:label="@string/ndvi"
+            android:parentActivityName=".ui.area.ListDataAreaActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
+            android:name=".ui.layer.LayerTaksasi"
+            android:exported="false"
+            android:label="@string/taksasi"
+            android:parentActivityName=".ui.area.ListDataAreaActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity
             android:name=".ui.SettingActivity"
             android:exported="false"
             android:label="@string/setting"
-            android:parentActivityName=".ui.MainActivity"/>
+            android:parentActivityName=".ui.MainActivity" />
         <activity
             android:name=".ui.SplashActivity"
             android:exported="true"
@@ -30,12 +64,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.ListDataActivity"
-            android:exported="true"
-            android:parentActivityName=".ui.MainActivity"
-            android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
