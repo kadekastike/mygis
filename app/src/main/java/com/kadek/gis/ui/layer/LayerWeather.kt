@@ -52,11 +52,11 @@ class LayerWeather : AppCompatActivity(), OnMapReadyCallback {
         val factory = ViewModelFactory.getInstance()
         val viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
-        val dataId = intent.getIntExtra(EXTRA_DATA, 0)
+        val sectionId = intent.getLongExtra(EXTRA_DATA, 0)
 
 //        binding.progressBar.bringToFront()
 //        binding.progressBar.visibility = View.VISIBLE
-        viewModel.getMapDetail(dataId).observe(this, { map ->
+        viewModel.getDetailSection(sectionId).observe(this, { map ->
 
             val newarkLatLng = LatLng(map.sw_latitude, map.sw_longitude)
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newarkLatLng, 11f))

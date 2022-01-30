@@ -15,6 +15,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.kadek.gis.R
+import com.kadek.gis.databinding.ActivityLayerNdviBinding
 import com.kadek.gis.databinding.ActivityLayerTaksasiBinding
 import com.kadek.gis.utils.ViewModelFactory
 import com.kadek.gis.viewmodel.MainViewModel
@@ -28,12 +29,12 @@ class LayerNDVI : AppCompatActivity(), OnMapReadyCallback {
 
     private var groundOverlay: GroundOverlay? = null
     private lateinit var mMap: GoogleMap
-    private lateinit var binding: ActivityLayerTaksasiBinding
+    private lateinit var binding: ActivityLayerNdviBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityLayerTaksasiBinding.inflate(layoutInflater)
+        binding = ActivityLayerNdviBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val mapFragment = supportFragmentManager
@@ -47,39 +48,40 @@ class LayerNDVI : AppCompatActivity(), OnMapReadyCallback {
         val factory = ViewModelFactory.getInstance()
         val viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
-        val dataId = intent.getIntExtra(EXTRA_DATA, 3)
+        val sectionId = intent.getLongExtra(EXTRA_DATA, 0)
 
         val executor = Executors.newSingleThreadExecutor()
         val handler = Handler(Looper.getMainLooper())
 
         binding.progressBar.bringToFront()
         binding.progressBar.visibility = View.VISIBLE
-        viewModel.getMapDetail(dataId).observe(this, { map ->
+        viewModel.getDetailSection(sectionId).observe(this, { section ->
             val newarkBounds = LatLngBounds(
-                LatLng(map.sw_latitude, map.sw_longitude), //south west (barat daya)
-                LatLng(map.ne_latitude, map.ne_longitude) // north east (timur laut)
+                LatLng(section.sw_latitude, section.sw_longitude), //south west (barat daya)
+                LatLng(section.ne_latitude, section.ne_longitude) // north east (timur laut)
             )
             executor.execute {
 
-                val ndvi = getImage(map.gambar_ndvi)
-                val newarkLatLng = LatLng(map.sw_latitude, map.sw_longitude)
+                val taksasi = getImage(section.gambar_ndvi)
+                val newarkLatLng = LatLng(section.sw_latitude, section.sw_longitude)
 
                 handler.post {
-                    supportActionBar?.title = map.name + " NDVI"
+                    supportActionBar?.title = section.name + " Taksasi"
                     groundOverlay = mMap.addGroundOverlay(
                         GroundOverlayOptions()
                             .positionFromBounds(newarkBounds)
-                            .image(BitmapDescriptorFactory.fromBitmap(ndvi)).anchor(1f, 0f)
+                            .image(BitmapDescriptorFactory.fromBitmap(taksasi)).anchor(1f, 0f)
                     )
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newarkLatLng, 10f))
                     binding.progressBar.visibility = View.GONE
                 }
             }
+
         })
     }
     private fun getImage(address: String) : Bitmap {
 
-        val baseUrl = "http://8b80-116-206-42-110.ngrok.io/storage/"
+        val baseUrl = "https://mygis.coejtm-unila.com/"
 
         return Glide.with(this)
             .asBitmap()

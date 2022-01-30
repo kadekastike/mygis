@@ -59,14 +59,14 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
         val factory = ViewModelFactory.getInstance()
         val viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
-        val dataId = intent.getIntExtra(EXTRA_DATA, 3)
+        val sectionId = intent.getLongExtra(EXTRA_DATA, 3)
 
         val executor = Executors.newSingleThreadExecutor()
         val handler = Handler(Looper.getMainLooper())
 
         binding.progressBar.bringToFront()
         binding.progressBar.visibility = View.VISIBLE
-        viewModel.getMapDetail(dataId).observe(this, { map ->
+        viewModel.getDetailSection(sectionId).observe(this, { map ->
             val newarkBounds = LatLngBounds(
                 LatLng(map.sw_latitude, map.sw_longitude), //south west (barat daya)
                 LatLng(map.ne_latitude, map.ne_longitude) // north east (timur laut)
@@ -90,7 +90,7 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
         })
 
         val client = AsyncHttpClient()
-        val url = "http://30ca-110-137-36-18.ngrok.io/data/geojson/$dataId"
+        val url = "https://mygis.coejtm-unila.com/data/geojson/$sectionId"
         client.get(url, object : AsyncHttpResponseHandler(){
             override fun onSuccess(
                 statusCode: Int,
@@ -137,7 +137,7 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun getImage(address: String) : Bitmap {
 
-        val baseUrl = "http://30ca-110-137-36-18.ngrok.io/storage/"
+        val baseUrl = "https://mygis.coejtm-unila.com/"
 
         return Glide.with(this)
             .asBitmap()

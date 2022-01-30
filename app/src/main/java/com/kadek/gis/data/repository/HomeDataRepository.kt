@@ -3,11 +3,11 @@ package com.kadek.gis.data.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.kadek.gis.data.model.Area
-import com.kadek.gis.data.remote.response.MapResponse
-import com.kadek.gis.data.model.Maps
+import com.kadek.gis.data.model.Section
 import com.kadek.gis.data.model.Weather
-import com.kadek.gis.data.remote.response.AreaResponse
 import com.kadek.gis.data.remote.response.DailyItem
+import com.kadek.gis.data.remote.response.ListAreaResponse
+import com.kadek.gis.data.remote.response.SectionResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -22,17 +22,46 @@ class HomeDataRepository private constructor(private val remoteDataSource: Remot
         }
     }
 
-    override fun getAreas(): LiveData<List<Area>> {
-        val areaResult = MutableLiveData<List<Area>>()
+    override fun getPlantationGroup(): LiveData<List<Area>> {
+        val pgResult = MutableLiveData<List<Area>>()
         CoroutineScope(IO).launch {
-            remoteDataSource.getAreas(object : RemoteDataSource.loadAreaCallback {
-                override fun onAllAreaReceived(areaResponse: List<AreaResponse>) {
+            remoteDataSource.getPlantationGroup(object : RemoteDataSource.loadAreaCallback {
+                override fun onAllAreaReceived(areaResponse: List<ListAreaResponse>) {
                     val areaList = ArrayList<Area>()
                     for (response in areaResponse) {
                         val area = Area(response.id,
                             response.name,
-                            response.createdAt,
-                            response.updatedAt
+                            response.pg,
+                            response.area,
+                            response.location,
+                            response.section,
+                            response.chief,
+                            response.url
+                        )
+                        areaList.add(area)
+                    }
+                    pgResult.postValue(areaList)
+                }
+            })
+        }
+        return pgResult
+    }
+
+    override fun getAreas(pgId: Int): LiveData<List<Area>> {
+        val areaResult = MutableLiveData<List<Area>>()
+        CoroutineScope(IO).launch {
+            remoteDataSource.getAreas(pgId, object : RemoteDataSource.loadAreaCallback {
+                override fun onAllAreaReceived(areaResponse: List<ListAreaResponse>) {
+                    val areaList = ArrayList<Area>()
+                    for (response in areaResponse) {
+                        val area = Area(response.id,
+                            response.name,
+                            response.pg,
+                            response.area,
+                            response.location,
+                            response.section,
+                            response.chief,
+                            response.url
                         )
                         areaList.add(area)
                     }
@@ -42,58 +71,82 @@ class HomeDataRepository private constructor(private val remoteDataSource: Remot
         }
         return areaResult
     }
-    override fun getMaps(areaId : Int): LiveData<List<Maps>> {
-        val mapResult = MutableLiveData<List<Maps>>()
+
+    override fun getLocations(pgId: Int, areaId: Int): LiveData<List<Area>> {
+        val locationsResult = MutableLiveData<List<Area>>()
         CoroutineScope(IO).launch {
-            remoteDataSource.getMaps(areaId, object: RemoteDataSource.loadMapsCallback{
-                override fun onAllMapsReceived(mapResponse: List<MapResponse>) {
-                    val mapList = ArrayList<Maps>()
-                    for (response in mapResponse) {
-                        val map = Maps(response.id,
+            remoteDataSource.getLocations(pgId, areaId, object : RemoteDataSource.loadAreaCallback {
+                override fun onAllAreaReceived(areaResponse: List<ListAreaResponse>) {
+                    val areaList = ArrayList<Area>()
+                    for (response in areaResponse) {
+                        val area = Area(response.id,
                             response.name,
+                            response.pg,
                             response.area,
-                            response.createdBy,
-                            response.swLatitude,
-                            response.swLongitude,
-                            response.neLatitude,
-                            response.neLongitude,
-                            response.gambarTaksasi,
-                            response.gambarNdvi,
-                            response.createdAt,
-                            response.updatedAt
+                            response.location,
+                            response.section,
+                            response.chief,
+                            response.url
                         )
-                        mapList.add(map)
+                        areaList.add(area)
                     }
-                    mapResult.postValue(mapList)
+                    locationsResult.postValue(areaList)
                 }
             })
         }
-        return mapResult
+        return locationsResult
     }
 
-    override fun getDetailMap(id: Int): LiveData<Maps> {
-        val mapResult = MutableLiveData<Maps>()
+    override fun getSections(pgId: Int, areaId: Int, locationId: Int): LiveData<List<Area>> {
+        val sectionsResult = MutableLiveData<List<Area>>()
         CoroutineScope(IO).launch {
-            remoteDataSource.getMapDetail(id, object : RemoteDataSource.loadMapDetailCallback {
-                override fun onMapDetailReceived(mapResponse: MapResponse) {
-                    val mapDetail = Maps(mapResponse.id,
-                        mapResponse.name,
-                        mapResponse.area,
-                        mapResponse.createdBy,
-                        mapResponse.swLatitude,
-                        mapResponse.swLongitude,
-                        mapResponse.neLatitude,
-                        mapResponse.neLongitude,
-                        mapResponse.gambarTaksasi,
-                        mapResponse.gambarNdvi,
-                        mapResponse.createdAt,
-                        mapResponse.updatedAt
-                    )
-                    mapResult.postValue(mapDetail)
+            remoteDataSource.getSections(pgId, areaId, locationId, object : RemoteDataSource.loadAreaCallback {
+                override fun onAllAreaReceived(areaResponse: List<ListAreaResponse>) {
+                    val areaList = ArrayList<Area>()
+                    for (response in areaResponse) {
+                        val area = Area(response.id,
+                            response.name,
+                            response.pg,
+                            response.area,
+                            response.location,
+                            response.section,
+                            response.chief,
+                            response.url
+                        )
+                        areaList.add(area)
+                    }
+                    sectionsResult.postValue(areaList)
                 }
             })
         }
-        return mapResult
+        return sectionsResult
+    }
+
+    override fun getDetailSection(sectionId: Long): LiveData<Section> {
+        val sectionResult = MutableLiveData<Section>()
+        CoroutineScope(IO).launch {
+            remoteDataSource.getDetailSection(sectionId, object : RemoteDataSource.loadMapDetailCallback {
+                override fun onMapDetailReceived(sectionResponse: SectionResponse) {
+                    val mapDetail = Section(sectionResponse.data?.id,
+                        sectionResponse.data?.name,
+                        sectionResponse.data?.geografi!!.swLatitude.toDouble(),
+                        sectionResponse.data.geografi.swLongitude.toDouble(),
+                        sectionResponse.data.geografi.neLatitude.toDouble(),
+                        sectionResponse.data.geografi.neLongitude.toDouble(),
+                        sectionResponse.data.geografi.gambarTaksasi,
+                        sectionResponse.data.geografi.gambarNdvi,
+                        sectionResponse.data.geografi.age,
+                        sectionResponse.data.geografi.variaty,
+                        sectionResponse.data.geografi.crop,
+                        sectionResponse.data.geografi.forcingTime,
+                        sectionResponse.data.geografi.createdAt,
+                        sectionResponse.data.geografi.updatedAt
+                    )
+                    sectionResult.postValue(mapDetail)
+                }
+            })
+        }
+        return sectionResult
     }
 
     override fun getWeather(lat: Double, long: Double): LiveData<List<Weather?>> {

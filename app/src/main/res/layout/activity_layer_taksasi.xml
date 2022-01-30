@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -25,6 +26,202 @@
         class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <FrameLayout
+        android:id="@+id/bottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:background="@drawable/rounded"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_round_remove_24" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="30dp"
+            android:text="Detail Vegetation"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:id="@+id/vegetation_info"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="70dp"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/weather_round">
+
+            <TextView
+                android:id="@+id/txt_vegetation_info"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="20dp"
+                android:text="Vegetation Info"
+                android:textColor="@color/white"
+                android:textSize="28sp" />
+
+            <TextView
+                android:id="@+id/age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="70dp"
+                android:text="Age :"
+                android:textColor="@color/white" />
+
+
+            <TextView
+                android:id="@+id/age_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="70dp"
+                android:layout_toEndOf="@id/age"
+                android:text="1 Month"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/variety"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/age"
+                android:layout_marginStart="20dp"
+                android:text="Variety  : "
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/variety_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/age"
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@id/variety"
+                android:text="GGF-A"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/crop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/variety"
+                android:layout_marginStart="20dp"
+                android:text="Crop : "
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/crop_result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/variety_result"
+                android:layout_marginStart="8dp"
+                android:layout_toEndOf="@id/crop"
+                android:text="First Crop"
+                android:textColor="@color/white" />
+
+            <ImageView
+                android:id="@+id/img_weather"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/pineapple"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/forcing_time"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="240dp"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/weather_round">
+
+            <TextView
+                android:id="@+id/txt_forcing_time"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="20dp"
+                android:text="Forcing Time"
+                android:textColor="@color/white"
+                android:textSize="28sp" />
+
+            <TextView
+                android:id="@+id/ft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="70dp"
+                android:textColor="@color/white" />
+
+
+<!--            <TextView-->
+<!--                android:id="@+id/age_result"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                android:layout_marginTop="70dp"-->
+<!--                android:layout_toEndOf="@id/age"-->
+<!--                android:text="1 Month"-->
+<!--                android:textColor="@color/white" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/variety"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_below="@id/age"-->
+<!--                android:layout_marginStart="20dp"-->
+<!--                android:text="Variety  : "-->
+<!--                android:textColor="@color/white" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/variety_result"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_below="@id/age"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                android:layout_toEndOf="@id/variety"-->
+<!--                android:text="GGF-A"-->
+<!--                android:textColor="@color/white" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/crop"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_below="@id/variety"-->
+<!--                android:layout_marginStart="20dp"-->
+<!--                android:text="Crop : "-->
+<!--                android:textColor="@color/white" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/crop_result"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_below="@id/variety_result"-->
+<!--                android:layout_marginStart="8dp"-->
+<!--                android:layout_toEndOf="@id/crop"-->
+<!--                android:text="First Crop"-->
+<!--                android:textColor="@color/white" />-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/img_weather"-->
+<!--                android:layout_width="150dp"-->
+<!--                android:layout_height="150dp"-->
+<!--                android:layout_alignParentEnd="true"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:layout_marginEnd="10dp"-->
+<!--                android:src="@drawable/pineapple"/>-->
+        </RelativeLayout>
+
+    </FrameLayout>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

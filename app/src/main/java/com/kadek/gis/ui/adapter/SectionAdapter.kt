@@ -6,21 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.kadek.gis.data.model.Maps
+import com.kadek.gis.data.model.Area
 import com.kadek.gis.databinding.ItemListDataBinding
 import com.kadek.gis.ui.layer.LayerNDVI
 import com.kadek.gis.ui.layer.LayerTaksasi
 import com.kadek.gis.ui.layer.LayerWeather
 import com.kadek.gis.ui.layer.ProgressActivity
 
-class ListDataAdapter : RecyclerView.Adapter<ListDataAdapter.ListDataViewHolder>() {
+class SectionAdapter : RecyclerView.Adapter<SectionAdapter.ListDataViewHolder>() {
 
-    private var listMaps = ArrayList<Maps>()
+    private var listSection = ArrayList<Area>()
 
-    fun setMaps(maps: List<Maps>?) {
-        if (maps == null) return
-        this.listMaps.clear()
-        this.listMaps.addAll(maps)
+    fun setSection(section: List<Area>?) {
+        if (section == null) return
+        this.listSection.clear()
+        this.listSection.addAll(section)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListDataViewHolder {
@@ -29,42 +29,42 @@ class ListDataAdapter : RecyclerView.Adapter<ListDataAdapter.ListDataViewHolder>
     }
 
     override fun onBindViewHolder(holder: ListDataViewHolder, position: Int) {
-        val map = listMaps[position]
-        holder.bind(map)
+        val section = listSection[position]
+        holder.bind(section)
     }
 
-    override fun getItemCount(): Int = listMaps.size
+    override fun getItemCount(): Int = listSection.size
 
     inner class ListDataViewHolder(private val binding: ItemListDataBinding) : RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("NotifyDataSetChanged")
-        fun bind(map: Maps) {
+        fun bind(section: Area) {
             with(binding) {
 
-                title.text = map.name
+                title.text = section.name
 
-                binding.expandableLayout.visibility = if (map.expand) View.VISIBLE else View.GONE
+                binding.expandableLayout.visibility = if (section.expand) View.VISIBLE else View.GONE
                 binding.cardView.setOnClickListener {
-                    map.expand = !map.expand
+                    section.expand = !section.expand
                     notifyDataSetChanged()
                 }
                 binding.taksasiButton.setOnClickListener {
                     val intent = Intent(binding.taksasiButton.context, LayerTaksasi::class.java)
-                    intent.putExtra(LayerTaksasi.EXTRA_DATA, map.id)
+                    intent.putExtra(LayerTaksasi.EXTRA_DATA, section.id)
                     binding.taksasiButton.context.startActivity(intent)
                 }
                 binding.ndviButton.setOnClickListener {
                     val intent = Intent(binding.ndviButton.context, LayerNDVI::class.java)
-                    intent.putExtra(LayerNDVI.EXTRA_DATA, map.id)
+                    intent.putExtra(LayerNDVI.EXTRA_DATA, section.id)
                     binding.ndviButton.context.startActivity(intent)
                 }
                 binding.progressButton.setOnClickListener {
                     val intent = Intent(binding.progressButton.context, ProgressActivity::class.java)
-                    intent.putExtra(ProgressActivity.EXTRA_DATA, map.id)
+                    intent.putExtra(ProgressActivity.EXTRA_DATA, section.id)
                     binding.progressButton.context.startActivity(intent)
                 }
                 binding.weatherButton.setOnClickListener {
                     val intent = Intent(binding.weatherButton.context, LayerWeather::class.java)
-                    intent.putExtra(LayerWeather.EXTRA_DATA, map.id)
+                    intent.putExtra(LayerWeather.EXTRA_DATA, section.id)
                     binding.weatherButton.context.startActivity(intent)
                 }
             }

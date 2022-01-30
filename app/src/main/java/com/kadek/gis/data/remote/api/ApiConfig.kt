@@ -7,13 +7,18 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ApiConfig {
     companion object{
-        private const val baseUrl = "http://30ca-110-137-36-18.ngrok.io"
+        private const val baseUrl = "https://mygis.coejtm-unila.com/api/map/"
         fun getApiService(): MapApiService {
+            val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+            val client = OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .build()
             val retrofit = Retrofit.Builder()
                 .baseUrl(
-                    "$baseUrl/api/"
+                    baseUrl
                 )
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
                 .build()
             return retrofit.create(MapApiService::class.java)
         }

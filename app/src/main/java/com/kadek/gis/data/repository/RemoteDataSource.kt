@@ -1,9 +1,7 @@
 package com.kadek.gis.data.repository
 
-import com.kadek.gis.data.remote.response.MapResponse
 import com.kadek.gis.data.remote.api.ApiConfig
-import com.kadek.gis.data.remote.response.AreaResponse
-import com.kadek.gis.data.remote.response.DailyItem
+import com.kadek.gis.data.remote.response.*
 import com.kadek.gis.utils.IdlingResource.idlingResource
 import retrofit2.await
 
@@ -16,26 +14,42 @@ class RemoteDataSource {
         }
     }
 
-    suspend fun getAreas(callback: loadAreaCallback) {
+    suspend fun getPlantationGroup(callback: loadAreaCallback) {
         idlingResource.increment()
-        ApiConfig.getApiService().getAreas().await().data?.let { areas ->
+        ApiConfig.getApiService().getPlantationGroup().await().data?.let { pgs ->
+            callback.onAllAreaReceived(pgs)
+            idlingResource.decrement()
+        }
+    }
+
+    suspend fun getAreas(pgId: Int, callback: loadAreaCallback) {
+        idlingResource.increment()
+        ApiConfig.getApiService().getAreas(pgId).await().data?.let { areas ->
             callback.onAllAreaReceived(areas)
             idlingResource.decrement()
         }
     }
 
-    suspend fun getMaps(areaId : Int, callback: loadMapsCallback) {
+    suspend fun getLocations(pgId: Int, areaId: Int, callback: loadAreaCallback) {
         idlingResource.increment()
-        ApiConfig.getApiService().getMaps(areaId).await().data?.let { maps ->
-            callback.onAllMapsReceived(maps)
+        ApiConfig.getApiService().getLocations(pgId, areaId).await().data?.let { locations ->
+            callback.onAllAreaReceived(locations)
             idlingResource.decrement()
         }
     }
 
-    suspend fun getMapDetail(id: Int, callback: loadMapDetailCallback){
+    suspend fun getSections(pgId: Int, areaId: Int, locationId: Int, callback: loadAreaCallback) {
         idlingResource.increment()
-        ApiConfig.getApiService().getMapDetail(id).await().let { maps ->
-            callback.onMapDetailReceived(maps)
+        ApiConfig.getApiService().getSections(pgId, areaId, locationId).await().data?.let { sections ->
+            callback.onAllAreaReceived(sections)
+            idlingResource.decrement()
+        }
+    }
+
+    suspend fun getDetailSection(sectionId: Long, callback: loadMapDetailCallback){
+        idlingResource.increment()
+        ApiConfig.getApiService().getDetailSection(sectionId).await().let { section ->
+            callback.onMapDetailReceived(section)
             idlingResource.decrement()
         }
     }
@@ -54,14 +68,10 @@ class RemoteDataSource {
     }
 
     interface loadAreaCallback {
-        fun onAllAreaReceived(areaResponse: List<AreaResponse>)
-    }
-
-    interface loadMapsCallback {
-        fun onAllMapsReceived(mapResponse: List<MapResponse>)
+        fun onAllAreaReceived(areaResponse: List<ListAreaResponse>)
     }
 
     interface  loadMapDetailCallback {
-        fun onMapDetailReceived(mapResponse: MapResponse)
+        fun onMapDetailReceived(mapResponse: SectionResponse)
     }
 }

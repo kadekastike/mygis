@@ -15,6 +15,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.kadek.gis.R
 import com.kadek.gis.databinding.ActivityLayerTaksasiBinding
 import com.kadek.gis.utils.ViewModelFactory
@@ -48,25 +49,30 @@ class LayerTaksasi : AppCompatActivity(), OnMapReadyCallback {
         val factory = ViewModelFactory.getInstance()
         val viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
-        val dataId = intent.getIntExtra(EXTRA_DATA, 3)
+        val sectionId = intent.getLongExtra(EXTRA_DATA, 0)
 
         val executor = Executors.newSingleThreadExecutor()
         val handler = Handler(Looper.getMainLooper())
 
         binding.progressBar.bringToFront()
         binding.progressBar.visibility = View.VISIBLE
-        viewModel.getMapDetail(dataId).observe(this, { map ->
+        viewModel.getDetailSection(sectionId).observe(this, { section ->
             val newarkBounds = LatLngBounds(
-                LatLng(map.sw_latitude, map.sw_longitude), //south west (barat daya)
-                LatLng(map.ne_latitude, map.ne_longitude) // north east (timur laut)
+                LatLng(section.sw_latitude, section.sw_longitude), //south west (barat daya)
+                LatLng(section.ne_latitude, section.ne_longitude) // north east (timur laut)
             )
             executor.execute {
 
-                val taksasi = getImage(map.gambar_taksasi)
-                val newarkLatLng = LatLng(map.sw_latitude, map.sw_longitude)
+                val taksasi = getImage(section.gambar_taksasi)
+                val newarkLatLng = LatLng(section.sw_latitude, section.sw_longitude)
 
                 handler.post {
-                    supportActionBar?.title = map.name + " Taksasi"
+                    supportActionBar?.title = section.name + " Taksasi"
+                    binding.ageResult.text = section.age
+                    binding.cropResult.text = section.crop + " crop"
+                    binding.varietyResult.text = section.variety
+                    binding.ft.text = section.forcing_time.toString() + " Month"
+
                     groundOverlay = mMap.addGroundOverlay(
                         GroundOverlayOptions()
                         .positionFromBounds(newarkBounds)
@@ -76,12 +82,17 @@ class LayerTaksasi : AppCompatActivity(), OnMapReadyCallback {
                     binding.progressBar.visibility = View.GONE
                 }
             }
+
         })
+        BottomSheetBehavior.from(binding.bottomSheet).apply {
+            peekHeight = 80
+            this.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
     }
 
     private fun getImage(address: String) : Bitmap {
 
-        val baseUrl = "http://8b80-116-206-42-110.ngrok.io/storage/"
+        val baseUrl = "https://mygis.coejtm-unila.com/"
 
         return Glide.with(this)
             .asBitmap()

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kadek.gis.databinding.ActivityMainBinding
 import com.kadek.gis.ui.adapter.AreaAdapter
+import com.kadek.gis.ui.adapter.PGAdapter
 import com.kadek.gis.utils.ViewModelFactory
 import com.kadek.gis.viewmodel.MainViewModel
 
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         val factory = ViewModelFactory.getInstance()
         val viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
-        val listAreaAdapter = AreaAdapter()
+        val listAreaAdapter = PGAdapter()
 
         binding.rvArea.apply {
             layoutManager = LinearLayoutManager(context)
@@ -34,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.progressBar.visibility = View.VISIBLE
-        viewModel.getAreas().observe(this, {
+        viewModel.getPlantationGroup().observe(this, {
             binding.progressBar.visibility = View.GONE
             listAreaAdapter.setArea(it)
             listAreaAdapter.notifyDataSetChanged()

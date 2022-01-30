@@ -7,11 +7,11 @@ import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kadek.gis.databinding.ActivityListDataAreaBinding
-import com.kadek.gis.ui.adapter.ListDataAdapter
+import com.kadek.gis.ui.adapter.AreaAdapter
 import com.kadek.gis.utils.ViewModelFactory
 import com.kadek.gis.viewmodel.MainViewModel
 
-class ListDataAreaActivity : AppCompatActivity() {
+class ListAreaActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_DATA = "extra_data"
@@ -29,7 +29,7 @@ class ListDataAreaActivity : AppCompatActivity() {
         val factory = ViewModelFactory.getInstance()
         val viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
-        val listDataAreaAdapter = ListDataAdapter()
+        val listDataAreaAdapter = AreaAdapter()
 
         binding.listArea.apply {
             layoutManager = LinearLayoutManager(context)
@@ -43,9 +43,9 @@ class ListDataAreaActivity : AppCompatActivity() {
         supportActionBar?.title = "$dataName Area List"
 
         binding.progressBar.visibility = View.VISIBLE
-        viewModel.getMaps(dataId).observe(this, {
+        viewModel.getAreas(dataId).observe(this, {
             binding.progressBar.visibility = View.GONE
-            listDataAreaAdapter.setMaps(it)
+            listDataAreaAdapter.setArea(it)
             listDataAreaAdapter.notifyDataSetChanged()
         })
     }
