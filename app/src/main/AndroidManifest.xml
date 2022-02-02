@@ -80,7 +80,8 @@
             android:exported="true"
             android:label="@string/title_activity_maps"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" />
+            tools:ignore="LockedOrientationActivity"
+            android:theme="@style/Theme.GIS.NoActionBar"/>
     </application>
 
 </manifest>

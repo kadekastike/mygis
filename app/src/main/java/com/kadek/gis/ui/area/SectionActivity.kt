@@ -6,9 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.kadek.gis.databinding.ActivityListDataAreaBinding
 import com.kadek.gis.databinding.ActivitySectionBinding
-import com.kadek.gis.ui.adapter.LocationAdapter
 import com.kadek.gis.ui.adapter.SectionAdapter
 import com.kadek.gis.utils.ViewModelFactory
 import com.kadek.gis.viewmodel.MainViewModel
@@ -52,5 +50,10 @@ class SectionActivity : AppCompatActivity() {
             sectionAdapter.setSection(it)
             sectionAdapter.notifyDataSetChanged()
         })
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        this.finish()
     }
 }

@@ -85,14 +85,14 @@ class LayerTaksasi : AppCompatActivity(), OnMapReadyCallback {
 
         })
         BottomSheetBehavior.from(binding.bottomSheet).apply {
-            peekHeight = 80
+            peekHeight = 280
             this.state = BottomSheetBehavior.STATE_COLLAPSED
         }
     }
 
     private fun getImage(address: String) : Bitmap {
 
-        val baseUrl = "https://mygis.coejtm-unila.com/"
+        val baseUrl = "https://mygis.coejtm-unila.com/storage/"
 
         return Glide.with(this)
             .asBitmap()
@@ -100,5 +100,10 @@ class LayerTaksasi : AppCompatActivity(), OnMapReadyCallback {
             .apply(RequestOptions().override(200,200))
             .submit()
             .get()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        this.finish()
     }
 }

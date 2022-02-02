@@ -33,6 +33,8 @@ class PGAdapter : RecyclerView.Adapter<PGAdapter.PGViewHolder>(){
         fun bind(area : Area) {
             with(binding) {
                 areaName.text = area.name
+                createdAt.text = area.created_at
+                chief.text = area.chief
 
                 itemView.setOnClickListener {
                     val intent = Intent(itemView.context, ListAreaActivity::class.java)

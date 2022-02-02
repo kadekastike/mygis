@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -54,8 +53,6 @@ class LayerWeather : AppCompatActivity(), OnMapReadyCallback {
 
         val sectionId = intent.getLongExtra(EXTRA_DATA, 0)
 
-//        binding.progressBar.bringToFront()
-//        binding.progressBar.visibility = View.VISIBLE
         viewModel.getDetailSection(sectionId).observe(this, { map ->
 
             val newarkLatLng = LatLng(map.sw_latitude, map.sw_longitude)
@@ -78,18 +75,18 @@ class LayerWeather : AppCompatActivity(), OnMapReadyCallback {
                 }
             })
 
-            val listWeahterAdapter = WeatherListAdapter()
+            val listWeatherAdapter = WeatherListAdapter()
 
             binding.rvWeather.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 setHasFixedSize(true)
-                adapter = listWeahterAdapter
+                adapter = listWeatherAdapter
             }
 
             viewModel.getWeather(map.sw_latitude, map.sw_longitude).observe(this, {
                 Log.d("WeatherViewModel", it.toString())
-                listWeahterAdapter.setWeather(it)
-                listWeahterAdapter.notifyDataSetChanged()
+                listWeatherAdapter.setWeather(it)
+                listWeatherAdapter.notifyDataSetChanged()
             })
         })
 
@@ -114,7 +111,7 @@ class LayerWeather : AppCompatActivity(), OnMapReadyCallback {
         prepTiles = mMap.addTileOverlay(TileOverlayOptions().tileProvider(tileProvider))!!
 
         BottomSheetBehavior.from(binding.bottomSheet).apply {
-            peekHeight = 80
+            peekHeight = 280
             this.state = BottomSheetBehavior.STATE_COLLAPSED
         }
     }

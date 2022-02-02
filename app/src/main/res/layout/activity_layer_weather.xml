@@ -6,22 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-<!--    <ProgressBar-->
-<!--        android:id="@+id/progressBar"-->
-<!--        style="?android:attr/progressBarStyle"-->
-<!--        android:layout_width="58dp"-->
-<!--        android:layout_height="60dp"-->
-<!--        android:layout_above="@id/map"-->
-<!--        android:layout_alignParentStart="true"-->
-<!--        android:layout_alignParentTop="true"-->
-<!--        android:layout_alignParentEnd="true"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:layout_marginStart="169dp"-->
-<!--        android:layout_marginTop="330dp"-->
-<!--        android:layout_marginEnd="184dp"-->
-<!--        android:layout_marginBottom="341dp"-->
-<!--        android:indeterminateTint="@color/blue_200" />-->
-
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/map"
         class="com.google.android.gms.maps.SupportMapFragment"
@@ -34,7 +18,7 @@
         android:layout_height="27dp"
         android:layout_marginStart="85dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginTop="670dp"
+        android:layout_marginTop="620dp"
         android:foregroundGravity="left"
         android:scaleType="fitCenter" />
 
@@ -58,6 +42,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="30dp"
             android:text="Detail Weather"
+            android:fontFamily="@font/sfuimedium"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -68,6 +53,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="70dp"
             android:layout_marginEnd="5dp"
+            android:elevation="10dp"
             android:background="@drawable/weather_round">
 
             <TextView
@@ -76,7 +62,8 @@
                 android:layout_height="match_parent"
                 android:padding="20dp"
                 android:text="Current Weather"
-                android:textColor="@color/white"
+                android:fontFamily="@font/sfuimedium"
+                android:textColor="@color/black"
                 android:textSize="28sp" />
 
             <TextView
@@ -85,8 +72,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="70dp"
+                android:fontFamily="@font/sfuimedium"
                 android:text="Humidity : "
-                android:textColor="@color/white" />
+                android:textColor="@color/black" />
 
 
             <TextView
@@ -96,8 +84,9 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="70dp"
                 android:layout_toEndOf="@id/humidity"
+                android:fontFamily="@font/sfuimedium"
                 android:text="100%"
-                android:textColor="@color/white" />
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/res_weather"
@@ -105,8 +94,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/humidity"
                 android:layout_marginStart="20dp"
+                android:fontFamily="@font/sfuimedium"
                 android:text="Clouds"
-                android:textColor="@color/white" />
+                android:textColor="@color/black" />
 
             <ImageView
                 android:id="@+id/img_weather"
@@ -114,6 +104,7 @@
                 android:layout_height="150dp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="10dp"
+                android:fontFamily="@font/sfuimedium"
                 android:layout_marginEnd="10dp" />
         </RelativeLayout>
 
@@ -124,6 +115,7 @@
             android:layout_marginTop="230dp"
             android:textSize="20sp"
             android:textStyle="bold"
+            android:fontFamily="@font/sfuimedium"
             android:layout_marginStart="8dp"/>
 
         <androidx.recyclerview.widget.RecyclerView

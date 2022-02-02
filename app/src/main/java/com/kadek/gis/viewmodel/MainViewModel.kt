@@ -3,11 +3,14 @@ package com.kadek.gis.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.kadek.gis.data.model.Area
+import com.kadek.gis.data.model.Master
 import com.kadek.gis.data.model.Section
 import com.kadek.gis.data.model.Weather
 import com.kadek.gis.data.repository.HomeDataRepository
 
 class MainViewModel(private val homeDataRepository: HomeDataRepository) : ViewModel() {
+
+    fun getMaster(): LiveData<List<Master>> = homeDataRepository.getMaster()
 
     fun getPlantationGroup(): LiveData<List<Area>> = homeDataRepository.getPlantationGroup()
 

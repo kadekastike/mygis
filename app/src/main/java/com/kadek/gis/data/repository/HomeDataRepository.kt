@@ -3,11 +3,10 @@ package com.kadek.gis.data.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.kadek.gis.data.model.Area
+import com.kadek.gis.data.model.Master
 import com.kadek.gis.data.model.Section
 import com.kadek.gis.data.model.Weather
-import com.kadek.gis.data.remote.response.DailyItem
-import com.kadek.gis.data.remote.response.ListAreaResponse
-import com.kadek.gis.data.remote.response.SectionResponse
+import com.kadek.gis.data.remote.response.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -20,6 +19,27 @@ class HomeDataRepository private constructor(private val remoteDataSource: Remot
         fun getInstance(remoteDataSource: RemoteDataSource): HomeDataRepository= instance ?: synchronized(this) {
             instance ?: HomeDataRepository(remoteDataSource)
         }
+    }
+
+    override fun getMaster(): LiveData<List<Master>> {
+        val masterResult = MutableLiveData<List<Master>>()
+        CoroutineScope(IO).launch {
+            remoteDataSource.getMaster(object : RemoteDataSource.loadMasterCallback {
+                override fun onAllMasterReceived(masterResponse: List<MasterResponseItem>) {
+                    val masterList = ArrayList<Master>()
+                    for (response in masterResponse) {
+                        val master = Master(
+                            response.title,
+                            response.total,
+                            response.url
+                        )
+                        masterList.add(master)
+                    }
+                    masterResult.postValue(masterList)
+                }
+            })
+        }
+        return  masterResult
     }
 
     override fun getPlantationGroup(): LiveData<List<Area>> {
@@ -36,7 +56,9 @@ class HomeDataRepository private constructor(private val remoteDataSource: Remot
                             response.location,
                             response.section,
                             response.chief,
-                            response.url
+                            response.url,
+                            response.created_at,
+                            response.updated_at
                         )
                         areaList.add(area)
                     }
@@ -61,7 +83,9 @@ class HomeDataRepository private constructor(private val remoteDataSource: Remot
                             response.location,
                             response.section,
                             response.chief,
-                            response.url
+                            response.url,
+                            response.created_at,
+                            response.updated_at
                         )
                         areaList.add(area)
                     }
@@ -86,7 +110,9 @@ class HomeDataRepository private constructor(private val remoteDataSource: Remot
                             response.location,
                             response.section,
                             response.chief,
-                            response.url
+                            response.url,
+                            response.created_at,
+                            response.updated_at
                         )
                         areaList.add(area)
                     }
@@ -111,7 +137,9 @@ class HomeDataRepository private constructor(private val remoteDataSource: Remot
                             response.location,
                             response.section,
                             response.chief,
-                            response.url
+                            response.url,
+                            response.created_at,
+                            response.updated_at
                         )
                         areaList.add(area)
                     }

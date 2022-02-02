@@ -9,5 +9,7 @@ data class Area(
     var section: Int?,
     var chief: String?,
     var url: String?,
+    var created_at: String?,
+    var updated_at: String?,
     var expand: Boolean = false
 )

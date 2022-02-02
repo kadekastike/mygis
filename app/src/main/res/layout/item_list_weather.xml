@@ -33,6 +33,7 @@
                         android:layout_marginTop="10dp"
                         android:text="Charles"
                         android:textSize="20sp"
+                        android:fontFamily="@font/sfuimedium"
                         android:textColor="@color/white"/>
 
                     <ImageView
@@ -53,6 +54,7 @@
                             android:layout_marginTop="10dp"
                             android:text="Humidity : "
                             android:textSize="15sp"
+                            android:fontFamily="@font/sfuimedium"
                             android:textColor="@color/white"/>
 
                         <TextView
@@ -61,6 +63,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:textSize="15sp"
+                            android:fontFamily="@font/sfuimedium"
                             android:textColor="@color/white"/>
 
                     </LinearLayout>
@@ -72,6 +75,7 @@
                         android:layout_marginTop="10dp"
                         android:text="Charles"
                         android:textSize="15sp"
+                        android:fontFamily="@font/sfuimedium"
                         android:textColor="@color/white"/>
 
                 </LinearLayout>

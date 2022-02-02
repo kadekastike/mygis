@@ -41,6 +41,8 @@ class SectionAdapter : RecyclerView.Adapter<SectionAdapter.ListDataViewHolder>()
             with(binding) {
 
                 title.text = section.name
+                chief.text = section.chief
+                createdAt.text = section.created_at
 
                 binding.expandableLayout.visibility = if (section.expand) View.VISIBLE else View.GONE
                 binding.cardView.setOnClickListener {

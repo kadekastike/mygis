@@ -6,8 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.kadek.gis.data.model.Area
 import com.kadek.gis.databinding.ItemListAreaBinding
-import com.kadek.gis.ui.area.ListAreaActivity
-import com.kadek.gis.ui.area.ListLocationsActivity
 import com.kadek.gis.ui.area.SectionActivity
 
 class LocationAdapter : RecyclerView.Adapter<LocationAdapter.LocationViewHolder>(){
@@ -35,6 +33,8 @@ class LocationAdapter : RecyclerView.Adapter<LocationAdapter.LocationViewHolder>
         fun bind(area : Area) {
             with(binding) {
                 areaName.text = area.name
+                createdAt.text = area.created_at
+                chief.text = area.chief
 
                 itemView.setOnClickListener {
                     val intent = Intent(itemView.context, SectionActivity::class.java)

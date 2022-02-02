@@ -1,14 +1,12 @@
 package com.kadek.gis.ui.area
 
 import android.annotation.SuppressLint
-import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kadek.gis.databinding.ActivityListDataAreaBinding
-import com.kadek.gis.ui.adapter.AreaAdapter
 import com.kadek.gis.ui.adapter.LocationAdapter
 import com.kadek.gis.utils.ViewModelFactory
 import com.kadek.gis.viewmodel.MainViewModel

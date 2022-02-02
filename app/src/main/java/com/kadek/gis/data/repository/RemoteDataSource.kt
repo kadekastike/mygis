@@ -14,6 +14,14 @@ class RemoteDataSource {
         }
     }
 
+    suspend fun getMaster(callback: loadMasterCallback) {
+        idlingResource.increment()
+        ApiConfig.getApiService().getMaster().await().let { masters ->
+            callback.onAllMasterReceived(masters)
+            idlingResource.decrement()
+        }
+    }
+
     suspend fun getPlantationGroup(callback: loadAreaCallback) {
         idlingResource.increment()
         ApiConfig.getApiService().getPlantationGroup().await().data?.let { pgs ->
@@ -71,7 +79,11 @@ class RemoteDataSource {
         fun onAllAreaReceived(areaResponse: List<ListAreaResponse>)
     }
 
-    interface  loadMapDetailCallback {
+    interface loadMapDetailCallback {
         fun onMapDetailReceived(mapResponse: SectionResponse)
+    }
+
+    interface loadMasterCallback {
+        fun onAllMasterReceived(masterResponse: List<MasterResponseItem>)
     }
 }

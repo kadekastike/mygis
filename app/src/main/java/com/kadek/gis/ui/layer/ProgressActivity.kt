@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -19,7 +18,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.data.geojson.GeoJsonLayer
-import com.google.maps.android.data.geojson.GeoJsonPolygonStyle
 import com.kadek.gis.R
 import com.kadek.gis.databinding.ActivityProgressBinding
 import com.kadek.gis.ui.CustomDialogFragment
@@ -137,7 +135,7 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun getImage(address: String) : Bitmap {
 
-        val baseUrl = "https://mygis.coejtm-unila.com/"
+        val baseUrl = "https://mygis.coejtm-unila.com/storage/"
 
         return Glide.with(this)
             .asBitmap()

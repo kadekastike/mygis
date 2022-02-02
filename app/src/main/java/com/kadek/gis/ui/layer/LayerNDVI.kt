@@ -16,7 +16,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.kadek.gis.R
 import com.kadek.gis.databinding.ActivityLayerNdviBinding
-import com.kadek.gis.databinding.ActivityLayerTaksasiBinding
 import com.kadek.gis.utils.ViewModelFactory
 import com.kadek.gis.viewmodel.MainViewModel
 import java.util.concurrent.Executors
@@ -81,7 +80,7 @@ class LayerNDVI : AppCompatActivity(), OnMapReadyCallback {
     }
     private fun getImage(address: String) : Bitmap {
 
-        val baseUrl = "https://mygis.coejtm-unila.com/"
+        val baseUrl = "https://mygis.coejtm-unila.com/storage/"
 
         return Glide.with(this)
             .asBitmap()

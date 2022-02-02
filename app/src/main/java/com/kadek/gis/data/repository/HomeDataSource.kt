@@ -2,10 +2,13 @@ package com.kadek.gis.data.repository
 
 import androidx.lifecycle.LiveData
 import com.kadek.gis.data.model.Area
+import com.kadek.gis.data.model.Master
 import com.kadek.gis.data.model.Section
 import com.kadek.gis.data.model.Weather
 
 interface HomeDataSource {
+
+    fun getMaster(): LiveData<List<Master>>
 
     fun getPlantationGroup(): LiveData<List<Area>>
 
