@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
@@ -88,7 +89,7 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
         })
 
         val client = AsyncHttpClient()
-        val url = "https://mygis.coejtm-unila.com/data/geojson/$sectionId"
+        val url = "https://mygis.coejtm-unila.com/api/map/section/$sectionId"
         client.get(url, object : AsyncHttpResponseHandler(){
             override fun onSuccess(
                 statusCode: Int,
@@ -99,8 +100,12 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
 
                     try {
                         val responseObject = JSONObject(result)
+                        val dataArray = responseObject.getJSONObject("data")
+                        val progressArray = dataArray.getJSONObject("progres")
 
-                        val geoJsonData: JSONObject = responseObject
+                        Log.d("ProgressData", progressArray.toString())
+                        val geoJsonData: JSONObject = progressArray
+
                         val layer = GeoJsonLayer(mMap, geoJsonData)
 
                         layer.defaultPolygonStyle.fillColor = Color.rgb(65, 111, 181)

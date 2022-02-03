@@ -31,11 +31,9 @@ class MasterAdapter: RecyclerView.Adapter<MasterAdapter.MasterViewHolder>() {
     override fun getItemCount(): Int = listMaster.size
 
     inner class MasterViewHolder(private val binding: ItemMasterBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(master: Master) {
-            with(binding) {
-                binding.title.text = master.title
-                binding.total.text = master.total.toString()
-            }
+        fun bind(master: Master) = with(binding) {
+            binding.title.text = master.title
+            binding.total.text = master.total.toString()
         }
     }
 }
