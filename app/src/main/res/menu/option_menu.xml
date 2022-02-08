@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:menuCategory="container">
-        <item android:id="@+id/menu1"
-            android:title="@string/choose_data"/>
-        <item android:id="@+id/menu2"
-            android:title="@string/setting"/>
+        <item
+            android:id="@+id/taksasi"
+            android:title="@string/taksasi"/>
+
+        <item
+            android:id="@+id/ndvi"
+            android:title="@string/ndvi" />
+
+        <item
+            android:id="@+id/job_progress"
+            android:title="@string/job_progress" />
+
+        <item
+            android:id="@+id/weather"
+            android:title="@string/weather"
+            />
     </group>
+
 </menu>

@@ -56,7 +56,7 @@ class LayerTaksasi : AppCompatActivity(), OnMapReadyCallback {
 
         binding.progressBar.bringToFront()
         binding.progressBar.visibility = View.VISIBLE
-        viewModel.getDetailSection(sectionId).observe(this, { section ->
+        viewModel.getDetailSection(sectionId).observe(this) { section ->
             val newarkBounds = LatLngBounds(
                 LatLng(section.sw_latitude, section.sw_longitude), //south west (barat daya)
                 LatLng(section.ne_latitude, section.ne_longitude) // north east (timur laut)
@@ -75,15 +75,15 @@ class LayerTaksasi : AppCompatActivity(), OnMapReadyCallback {
 
                     groundOverlay = mMap.addGroundOverlay(
                         GroundOverlayOptions()
-                        .positionFromBounds(newarkBounds)
-                        .image(BitmapDescriptorFactory.fromBitmap(taksasi)).anchor(1f, 0f)
+                            .positionFromBounds(newarkBounds)
+                            .image(BitmapDescriptorFactory.fromBitmap(taksasi)).anchor(1f, 0f)
                     )
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newarkLatLng, 10f))
                     binding.progressBar.visibility = View.GONE
                 }
             }
 
-        })
+        }
         BottomSheetBehavior.from(binding.bottomSheet).apply {
             peekHeight = 280
             this.state = BottomSheetBehavior.STATE_COLLAPSED

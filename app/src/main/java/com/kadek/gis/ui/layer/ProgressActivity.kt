@@ -65,7 +65,7 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
 
         binding.progressBar.bringToFront()
         binding.progressBar.visibility = View.VISIBLE
-        viewModel.getDetailSection(sectionId).observe(this, { map ->
+        viewModel.getDetailSection(sectionId).observe(this) { map ->
             val newarkBounds = LatLngBounds(
                 LatLng(map.sw_latitude, map.sw_longitude), //south west (barat daya)
                 LatLng(map.ne_latitude, map.ne_longitude) // north east (timur laut)
@@ -86,7 +86,7 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
                     binding.progressBar.visibility = View.GONE
                 }
             }
-        })
+        }
 
         val client = AsyncHttpClient()
         val url = "https://mygis.coejtm-unila.com/api/map/section/$sectionId"

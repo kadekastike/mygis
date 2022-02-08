@@ -34,10 +34,10 @@ class MainActivity : AppCompatActivity() {
             adapter = listAreaAdapter
         }
 
-        viewModel.getPlantationGroup().observe(this, {
+        viewModel.getPlantationGroup().observe(this) {
             listAreaAdapter.setArea(it)
             listAreaAdapter.notifyDataSetChanged()
-        })
+        }
 
         val listMasterAdapter = MasterAdapter()
         binding.rvMaster.apply {
@@ -45,10 +45,10 @@ class MainActivity : AppCompatActivity() {
             setHasFixedSize(true)
             adapter = listMasterAdapter
         }
-        viewModel.getMaster().observe(this, {
+        viewModel.getMaster().observe(this) {
             listMasterAdapter.setMaster(it)
             listMasterAdapter.notifyDataSetChanged()
-        })
+        }
 
     }
 }

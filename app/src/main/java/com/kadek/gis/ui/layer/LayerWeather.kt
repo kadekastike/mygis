@@ -53,7 +53,7 @@ class LayerWeather : AppCompatActivity(), OnMapReadyCallback {
 
         val sectionId = intent.getLongExtra(EXTRA_DATA, 0)
 
-        viewModel.getDetailSection(sectionId).observe(this, { map ->
+        viewModel.getDetailSection(sectionId).observe(this) { map ->
 
             val newarkLatLng = LatLng(map.sw_latitude, map.sw_longitude)
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newarkLatLng, 11f))
@@ -62,10 +62,10 @@ class LayerWeather : AppCompatActivity(), OnMapReadyCallback {
 
             weatherViewModel.getWeather(map.sw_latitude, map.sw_longitude)
 
-            weatherViewModel.currentHumidity.observe(this, {
+            weatherViewModel.currentHumidity.observe(this) {
                 binding.humidityLevel.text = it.humidity.toString() + "%"
-            })
-            weatherViewModel.currentWeather.observe(this, {
+            }
+            weatherViewModel.currentWeather.observe(this) {
                 it.map {
                     binding.resWeather.text = it?.description
                     val baseUrl = "http://openweathermap.org/img/wn/"
@@ -73,7 +73,7 @@ class LayerWeather : AppCompatActivity(), OnMapReadyCallback {
                         .load(baseUrl + it?.icon + "@2x.png")
                         .into(binding.imgWeather)
                 }
-            })
+            }
 
             val listWeatherAdapter = WeatherListAdapter()
 
@@ -83,12 +83,12 @@ class LayerWeather : AppCompatActivity(), OnMapReadyCallback {
                 adapter = listWeatherAdapter
             }
 
-            viewModel.getWeather(map.sw_latitude, map.sw_longitude).observe(this, {
+            viewModel.getWeather(map.sw_latitude, map.sw_longitude).observe(this) {
                 Log.d("WeatherViewModel", it.toString())
                 listWeatherAdapter.setWeather(it)
                 listWeatherAdapter.notifyDataSetChanged()
-            })
-        })
+            }
+        }
 
         val tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
             @Synchronized

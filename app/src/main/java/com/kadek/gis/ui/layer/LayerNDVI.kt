@@ -54,7 +54,7 @@ class LayerNDVI : AppCompatActivity(), OnMapReadyCallback {
 
         binding.progressBar.bringToFront()
         binding.progressBar.visibility = View.VISIBLE
-        viewModel.getDetailSection(sectionId).observe(this, { section ->
+        viewModel.getDetailSection(sectionId).observe(this) { section ->
             val newarkBounds = LatLngBounds(
                 LatLng(section.sw_latitude, section.sw_longitude), //south west (barat daya)
                 LatLng(section.ne_latitude, section.ne_longitude) // north east (timur laut)
@@ -76,7 +76,7 @@ class LayerNDVI : AppCompatActivity(), OnMapReadyCallback {
                 }
             }
 
-        })
+        }
     }
     private fun getImage(address: String) : Bitmap {
 

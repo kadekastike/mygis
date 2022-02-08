@@ -20,13 +20,13 @@
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20sp"
+            android:layout_marginTop="5dp"
             android:fontFamily="@font/sfuisemibold"
             android:text="Area"
             android:textColor="@color/black"
-            android:layout_marginTop="5dp"
             android:textSize="16sp" />
 
 
@@ -62,46 +62,67 @@
             android:textSize="14sp"
             android:layout_marginEnd="10dp"/>
 
-        <RelativeLayout
-            android:id="@+id/expandable_layout"
-            android:layout_width="match_parent"
+<!--        <TextView-->
+<!--            android:id="@+id/textViewOptions"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:paddingEnd="16dp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:text="&#8942;"-->
+<!--            android:textAppearance="?android:textAppearanceLarge" />-->
+        <ImageView
+            android:id="@+id/textViewOptions"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_below="@id/created_at">
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:paddingEnd="5dp"
+            android:foregroundGravity="center"
+            android:src="@drawable/ic_baseline_more_vert_24"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textStyle="bold" />
+<!--        <RelativeLayout-->
+<!--            android:id="@+id/expandable_layout"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:layout_below="@id/created_at">-->
 
-            <Button
-                android:id="@+id/taksasiButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Taksasi"
-                style="@style/Widget.MaterialComponents.Button.TextButton" />
+<!--            <Button-->
+<!--                android:id="@+id/taksasiButton"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Taksasi"-->
+<!--                style="@style/Widget.MaterialComponents.Button.TextButton" />-->
 
-            <Button
-                android:id="@+id/ndviButton"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="-6dp"
-                android:layout_toEndOf="@+id/taksasiButton"
-                android:text="NDVI" />
+<!--            <Button-->
+<!--                android:id="@+id/ndviButton"-->
+<!--                style="@style/Widget.MaterialComponents.Button.TextButton"-->
+<!--                android:layout_width="60dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="-6dp"-->
+<!--                android:layout_toEndOf="@+id/taksasiButton"-->
+<!--                android:text="NDVI" />-->
 
-            <Button
-                android:id="@+id/progressButton"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/ndviButton"
-                android:text="Job Progress" />
+<!--            <Button-->
+<!--                android:id="@+id/progressButton"-->
+<!--                style="@style/Widget.MaterialComponents.Button.TextButton"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_toEndOf="@+id/ndviButton"-->
+<!--                android:text="Job Progress" />-->
 
-            <Button
-                android:id="@+id/weatherButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Weather"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:layout_toEndOf="@+id/progressButton"
-                />
-        </RelativeLayout>
+<!--            <Button-->
+<!--                android:id="@+id/weatherButton"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Weather"-->
+<!--                style="@style/Widget.MaterialComponents.Button.TextButton"-->
+<!--                android:layout_toEndOf="@+id/progressButton"-->
+<!--                />-->
+<!--        </RelativeLayout>-->
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
