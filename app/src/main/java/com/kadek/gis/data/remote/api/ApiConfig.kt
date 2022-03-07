@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class ApiConfig {
     companion object{
-        private const val baseUrl = "https://mygis.coejtm-unila.com/api/"
+        private const val baseUrl = "https://mygis.my.id/api/"
         fun getApiService(): MapApiService {
             val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
             val client = OkHttpClient.Builder()

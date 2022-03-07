@@ -84,7 +84,6 @@ class LayerWeather : AppCompatActivity(), OnMapReadyCallback {
             }
 
             viewModel.getWeather(map.sw_latitude, map.sw_longitude).observe(this) {
-                Log.d("WeatherViewModel", it.toString())
                 listWeatherAdapter.setWeather(it)
                 listWeatherAdapter.notifyDataSetChanged()
             }

@@ -140,7 +140,7 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun getImage(address: String) : Bitmap {
 
-        val baseUrl = "https://mygis.coejtm-unila.com/storage/"
+        val baseUrl = "https://mygis.my.id/storage/"
 
         return Glide.with(this)
             .asBitmap()
