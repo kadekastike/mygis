@@ -1,11 +1,17 @@
 package com.kadek.gis.ui
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.MenuItem
+import android.widget.PopupMenu
+import androidx.core.view.get
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.kadek.gis.R
 import com.kadek.gis.databinding.ActivityMainBinding
 import com.kadek.gis.ui.adapter.MasterAdapter
 import com.kadek.gis.ui.adapter.PGAdapter
@@ -49,6 +55,26 @@ class MainActivity : AppCompatActivity() {
             listMasterAdapter.setMaster(it)
             listMasterAdapter.notifyDataSetChanged()
         }
-
     }
+//    private fun performOptionMenuClick(position: Int) {
+//        Log.d("OptionMENu", position.toString())
+//        val popupMenu = PopupMenu(this, binding.rvArea[position].findViewById(R.id.textViewOptions))
+//        popupMenu.inflate(R.menu.option_menu_pg)
+//        popupMenu.setOnMenuItemClickListener (object : PopupMenu.OnMenuItemClickListener {
+//            override fun onMenuItemClick(item: MenuItem?): Boolean {
+//                when(item?.itemId) {
+//                    R.id.taksasi -> {
+//                        val intent = Intent(this@MainActivity, PGMapActivity::class.java)
+//                        startActivity(intent)
+//                        return true
+//                    }
+//                    else -> {
+//                        return false
+//                    }
+//                }
+//            }
+//        })
+//        popupMenu.show()
+//    }
+
 }

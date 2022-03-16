@@ -16,6 +16,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
+            android:name=".ui.layer.IrrigationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.PGMapActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.area.SectionActivity"
             android:exported="false" />
         <activity
@@ -80,8 +86,8 @@
             android:exported="true"
             android:label="@string/title_activity_maps"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity"
-            android:theme="@style/Theme.GIS.NoActionBar"/>
+            android:theme="@style/Theme.GIS.NoActionBar"
+            tools:ignore="LockedOrientationActivity" />
     </application>
 
 </manifest>

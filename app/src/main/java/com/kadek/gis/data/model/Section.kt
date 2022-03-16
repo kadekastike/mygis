@@ -12,7 +12,7 @@ data class Section(
     var age: String?,
     var variety: String?,
     var crop: String?,
-    var forcing_time: Int?,
+    var forcing_time: String?,
     var created_at: String?,
     var updated_at: String?,
     var expand: Boolean = false

@@ -8,7 +8,7 @@ import com.kadek.gis.data.model.Area
 import com.kadek.gis.databinding.ItemListAreaBinding
 import com.kadek.gis.ui.area.ListAreaActivity
 
-class PGAdapter : RecyclerView.Adapter<PGAdapter.PGViewHolder>(){
+class PGAdapter() : RecyclerView.Adapter<PGAdapter.PGViewHolder>(){
 
     private val listAreas = ArrayList<Area>()
 
@@ -16,6 +16,9 @@ class PGAdapter : RecyclerView.Adapter<PGAdapter.PGViewHolder>(){
         if (areas == null) return
         this.listAreas.clear()
         this.listAreas.addAll(areas)
+    }
+    interface OptionsMenuClickListener {
+        fun optionsMenuClicked(position: Int)
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PGAdapter.PGViewHolder {
         val areaListBinding = ItemListAreaBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -25,11 +28,15 @@ class PGAdapter : RecyclerView.Adapter<PGAdapter.PGViewHolder>(){
     override fun onBindViewHolder(holder: PGAdapter.PGViewHolder, position: Int) {
         val area = listAreas[position]
         holder.bind(area)
+//        holder.optionMenu.setOnClickListener {
+//            optionsMenuClickListener.optionsMenuClicked(position)
+//        }
     }
 
     override fun getItemCount(): Int = listAreas.size
 
     inner class PGViewHolder(private val binding: ItemListAreaBinding): RecyclerView.ViewHolder(binding.root) {
+//        val optionMenu = binding.textViewOptions
         fun bind(area : Area) {
             with(binding) {
                 areaName.text = area.name

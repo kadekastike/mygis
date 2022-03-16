@@ -15,10 +15,7 @@ import com.kadek.gis.R
 import com.kadek.gis.data.model.Area
 import com.kadek.gis.databinding.ActivitySectionBinding
 import com.kadek.gis.ui.adapter.SectionAdapter
-import com.kadek.gis.ui.layer.LayerNDVI
-import com.kadek.gis.ui.layer.LayerTaksasi
-import com.kadek.gis.ui.layer.LayerWeather
-import com.kadek.gis.ui.layer.ProgressActivity
+import com.kadek.gis.ui.layer.*
 import com.kadek.gis.utils.ViewModelFactory
 import com.kadek.gis.viewmodel.MainViewModel
 
@@ -94,9 +91,9 @@ class SectionActivity : AppCompatActivity() {
                         startActivity(intent)
                         return true
                     }
-                    R.id.weather -> {
-                        val intent = Intent(this@SectionActivity, LayerWeather::class.java)
-                        intent.putExtra(LayerWeather.EXTRA_DATA, sectionList[position].id)
+                    R.id.irrigation -> {
+                        val intent = Intent(this@SectionActivity, IrrigationActivity::class.java)
+                        intent.putExtra(IrrigationActivity.EXTRA_DATA, sectionList[position].id)
                         startActivity(intent)
                         return true
                     }

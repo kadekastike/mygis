@@ -1,7 +1,5 @@
 package com.kadek.gis.ui.layer
 
-import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -11,18 +9,16 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.maps.android.data.geojson.GeoJsonLayer
 import com.kadek.gis.R
-import com.kadek.gis.databinding.ActivityProgressBinding
-import com.kadek.gis.ui.CustomDialogFragment
-import com.kadek.gis.utils.Helper.getImage
+import com.kadek.gis.databinding.ActivityIrigationBinding
+import com.kadek.gis.utils.Helper
 import com.kadek.gis.utils.ViewModelFactory
 import com.kadek.gis.viewmodel.MainViewModel
 import com.loopj.android.http.AsyncHttpClient
@@ -32,20 +28,19 @@ import org.json.JSONObject
 import java.lang.Exception
 import java.util.concurrent.Executors
 
-class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
+class IrrigationActivity : AppCompatActivity(), OnMapReadyCallback {
+
+    private lateinit var binding: ActivityIrigationBinding
+    private lateinit var mMap: GoogleMap
+    private var groundOverlay: GroundOverlay? = null
 
     companion object {
-        const val EXTRA_DATA = "extra_data"
+        const val EXTRA_DATA = "EXTRA_DATA"
     }
-
-    private var groundOverlay: GroundOverlay? = null
-    private lateinit var mMap: GoogleMap
-    private lateinit var binding: ActivityProgressBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityProgressBinding.inflate(layoutInflater)
+        binding = ActivityIrigationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val mapFragment = supportFragmentManager
@@ -53,7 +48,6 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         val factory = ViewModelFactory.getInstance()
@@ -64,27 +58,23 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
         val executor = Executors.newSingleThreadExecutor()
         val handler = Handler(Looper.getMainLooper())
 
-        binding.progressBar.bringToFront()
-        binding.progressBar.visibility = View.VISIBLE
         viewModel.getDetailSection(sectionId).observe(this) { map ->
             val newarkBounds = LatLngBounds(
                 LatLng(map.sw_latitude, map.sw_longitude), //south west (barat daya)
                 LatLng(map.ne_latitude, map.ne_longitude) // north east (timur laut)
             )
             executor.execute {
-
-                val taksasi = getImage(this, map.gambar_taksasi)
+                val taksasi = Helper.getImage(this, map.gambar_taksasi)
                 val newarkLatLng = LatLng(map.sw_latitude, map.sw_longitude)
 
                 handler.post {
-                    supportActionBar?.title = map.name + " Job Progress"
+                    supportActionBar?.title = map.name + " Irrigation"
                     groundOverlay = mMap.addGroundOverlay(
                         GroundOverlayOptions()
                             .positionFromBounds(newarkBounds)
                             .image(BitmapDescriptorFactory.fromBitmap(taksasi)).anchor(1f, 0f)
                     )
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newarkLatLng, 16f))
-                    binding.progressBar.visibility = View.GONE
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newarkLatLng, 12f))
                 }
             }
         }
@@ -99,31 +89,56 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
             ) {
                 val result = responseBody?.let { String(it) }
 
-                    try {
-                        val responseObject = JSONObject(result)
-                        val dataArray = responseObject.getJSONObject("data")
-                        val progressArray = dataArray.getJSONObject("progres")
+                try {
+                    val responseObject = JSONObject(result)
+                    val dataObject = responseObject.getJSONObject("data")
+                    val irrigationObject = dataObject.getJSONObject("irigation")
 
-                        if (progressArray != null) {
-                            val geoJsonData: JSONObject = progressArray
+                    if (irrigationObject != null) {
+                        val name = irrigationObject.getString("name")
+                        val volume = irrigationObject.getString("state")
 
-                            val layer = GeoJsonLayer(mMap, geoJsonData)
+                        binding.nameResult.text = name
+                        binding.valumeResult.text = volume
 
-                            layer.defaultPolygonStyle.fillColor = Color.rgb(65, 111, 181)
-                            layer.defaultPolygonStyle.strokeColor = Color.rgb(65, 111, 181)
-                            layer.addLayerToMap()
+                        val geometryData = irrigationObject.getJSONObject("geometry")
+                        val geoJsonData: JSONObject = geometryData
 
-                            layer.setOnFeatureClickListener { feature ->
-                                val dialog = CustomDialogFragment(feature.getProperty("catatan"), feature.getProperty("pj"), feature.getProperty("created_at"))
-                                dialog.show(supportFragmentManager, "CustomDialog")
+                        Log.d("GeometryData", geoJsonData.toString())
+
+                        val layer = GeoJsonLayer(mMap, geoJsonData)
+                        when (volume) {
+                            "full" -> {
+                                layer.defaultPolygonStyle.fillColor = Color.rgb(30,129,176)
                             }
-                        } else {
-                            Toast.makeText(this@ProgressActivity, "Tidak ada progress pekerjaan", Toast.LENGTH_SHORT).show()
+                            "quarter" -> {
+                                layer.defaultPolygonStyle.fillColor = Color.rgb(65, 111, 181)
+                            }
+                            else -> {
+                                layer.defaultPolygonStyle.fillColor = Color.rgb(226,135,67)
+                            }
                         }
 
-                    } catch (e: Exception) {
-                        e.printStackTrace()
+                        layer.defaultPolygonStyle.strokeColor = Color.rgb(65, 111, 181)
+                        layer.addLayerToMap()
+
+//                        layer.setOnFeatureClickListener { feature ->
+//                            val dialog = CustomDialogFragment(feature.getProperty("catatan"), feature.getProperty("pj"), feature.getProperty("created_at"))
+//                            dialog.show(supportFragmentManager, "CustomDialog")
+//                        }
+                        BottomSheetBehavior.from(binding.bottomSheet).apply {
+                            peekHeight = 280
+                            this.state = BottomSheetBehavior.STATE_COLLAPSED
+                        }
+
+                    } else {
+                        binding.bottomSheet.visibility = View.GONE
+                        Toast.makeText(this@IrrigationActivity, "Seksi tidak tersambung dengan irigasi", Toast.LENGTH_LONG).show()
                     }
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
 
             override fun onFailure(
@@ -138,7 +153,7 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
                     404 -> "$statusCode : Not Found"
                     else -> "$statusCode : ${error?.message}"
                 }
-                Toast.makeText(this@ProgressActivity, errorMessage, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@IrrigationActivity, errorMessage, Toast.LENGTH_SHORT).show()
             }
         })
     }

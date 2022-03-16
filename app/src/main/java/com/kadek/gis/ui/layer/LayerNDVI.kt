@@ -16,6 +16,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.kadek.gis.R
 import com.kadek.gis.databinding.ActivityLayerNdviBinding
+import com.kadek.gis.utils.Helper.getImage
 import com.kadek.gis.utils.ViewModelFactory
 import com.kadek.gis.viewmodel.MainViewModel
 import java.util.concurrent.Executors
@@ -61,7 +62,7 @@ class LayerNDVI : AppCompatActivity(), OnMapReadyCallback {
             )
             executor.execute {
 
-                val taksasi = getImage(section.gambar_ndvi)
+                val taksasi = getImage(this, section.gambar_ndvi)
                 val newarkLatLng = LatLng(section.sw_latitude, section.sw_longitude)
 
                 handler.post {
@@ -71,22 +72,11 @@ class LayerNDVI : AppCompatActivity(), OnMapReadyCallback {
                             .positionFromBounds(newarkBounds)
                             .image(BitmapDescriptorFactory.fromBitmap(taksasi)).anchor(1f, 0f)
                     )
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newarkLatLng, 10f))
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newarkLatLng, 16f))
                     binding.progressBar.visibility = View.GONE
                 }
             }
 
         }
-    }
-    private fun getImage(address: String) : Bitmap {
-
-        val baseUrl = "https://mygis.my.id/storage/"
-
-        return Glide.with(this)
-            .asBitmap()
-            .load(baseUrl + address)
-            .apply(RequestOptions().override(200,200))
-            .submit()
-            .get()
     }
 }

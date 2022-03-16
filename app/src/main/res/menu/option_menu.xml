@@ -14,8 +14,8 @@
             android:title="@string/job_progress" />
 
         <item
-            android:id="@+id/weather"
-            android:title="@string/weather"
+            android:id="@+id/irrigation"
+            android:title="@string/irrigation"
             />
     </group>
 
