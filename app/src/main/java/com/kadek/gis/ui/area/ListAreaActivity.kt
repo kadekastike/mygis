@@ -26,6 +26,8 @@ class ListAreaActivity : AppCompatActivity() {
         binding = ActivityListDataAreaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         val factory = ViewModelFactory.getInstance()
         val viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
@@ -42,11 +44,22 @@ class ListAreaActivity : AppCompatActivity() {
 
         supportActionBar?.title = "$dataName Area List"
 
+        binding.dataNotFound.visibility = View.GONE
         binding.progressBar.visibility = View.VISIBLE
-        viewModel.getAreas(dataId).observe(this, {
+        viewModel.getAreas(dataId).observe(this) {
             binding.progressBar.visibility = View.GONE
-            listDataAreaAdapter.setArea(it)
-            listDataAreaAdapter.notifyDataSetChanged()
-        })
+            if (it.isEmpty()) {
+                binding.listArea.visibility = View.GONE
+                binding.dataNotFound.visibility = View.VISIBLE
+            } else {
+                listDataAreaAdapter.setArea(it)
+                listDataAreaAdapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
     }
 }

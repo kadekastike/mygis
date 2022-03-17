@@ -46,6 +46,12 @@ class IrrigationActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        binding.dataNotFound.visibility = View.GONE
+        binding.map.visibility = View.GONE
+        binding.bottomSheet.visibility = View.GONE
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -59,24 +65,29 @@ class IrrigationActivity : AppCompatActivity(), OnMapReadyCallback {
         val handler = Handler(Looper.getMainLooper())
 
         viewModel.getDetailSection(sectionId).observe(this) { map ->
-            val newarkBounds = LatLngBounds(
-                LatLng(map.sw_latitude, map.sw_longitude), //south west (barat daya)
-                LatLng(map.ne_latitude, map.ne_longitude) // north east (timur laut)
-            )
-            executor.execute {
-                val taksasi = Helper.getImage(this, map.gambar_taksasi)
-                val newarkLatLng = LatLng(map.sw_latitude, map.sw_longitude)
+            if (map.gambar_taksasi != null) {
+                val newarkBounds = LatLngBounds(
+                    LatLng(map.sw_latitude!!, map.sw_longitude!!), //south west (barat daya)
+                    LatLng(map.ne_latitude!!, map.ne_longitude!!) // north east (timur laut)
+                )
+                executor.execute {
+                    val taksasi = Helper.getImage(this, map.gambar_taksasi!!)
+                    val newarkLatLng = LatLng(map.sw_latitude!!, map.sw_longitude!!)
 
-                handler.post {
-                    supportActionBar?.title = map.name + " Irrigation"
-                    groundOverlay = mMap.addGroundOverlay(
-                        GroundOverlayOptions()
-                            .positionFromBounds(newarkBounds)
-                            .image(BitmapDescriptorFactory.fromBitmap(taksasi)).anchor(1f, 0f)
-                    )
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newarkLatLng, 12f))
+                    handler.post {
+                        supportActionBar?.title = map.name + " Irrigation"
+                        groundOverlay = mMap.addGroundOverlay(
+                            GroundOverlayOptions()
+                                .positionFromBounds(newarkBounds)
+                                .image(BitmapDescriptorFactory.fromBitmap(taksasi)).anchor(1f, 0f)
+                        )
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newarkLatLng, 12f))
+                    }
                 }
+            } else {
+                showNoData()
             }
+
         }
 
         val client = AsyncHttpClient()
@@ -92,52 +103,44 @@ class IrrigationActivity : AppCompatActivity(), OnMapReadyCallback {
                 try {
                     val responseObject = JSONObject(result)
                     val dataObject = responseObject.getJSONObject("data")
+
                     val irrigationObject = dataObject.getJSONObject("irigation")
+                    val name = irrigationObject.getString("name")
+                    val volume = irrigationObject.getString("state")
 
-                    if (irrigationObject != null) {
-                        val name = irrigationObject.getString("name")
-                        val volume = irrigationObject.getString("state")
+                    binding.nameResult.text = name
+                    binding.valumeResult.text = volume
 
-                        binding.nameResult.text = name
-                        binding.valumeResult.text = volume
+                    val geometryData = irrigationObject.getJSONObject("geometry")
+                    val geoJsonData: JSONObject = geometryData
 
-                        val geometryData = irrigationObject.getJSONObject("geometry")
-                        val geoJsonData: JSONObject = geometryData
+                    Log.d("GeometryData", geoJsonData.toString())
 
-                        Log.d("GeometryData", geoJsonData.toString())
-
-                        val layer = GeoJsonLayer(mMap, geoJsonData)
-                        when (volume) {
-                            "full" -> {
-                                layer.defaultPolygonStyle.fillColor = Color.rgb(30,129,176)
-                            }
-                            "quarter" -> {
-                                layer.defaultPolygonStyle.fillColor = Color.rgb(65, 111, 181)
-                            }
-                            else -> {
-                                layer.defaultPolygonStyle.fillColor = Color.rgb(226,135,67)
-                            }
+                    val layer = GeoJsonLayer(mMap, geoJsonData)
+                    when (volume) {
+                        "full" -> {
+                            layer.defaultPolygonStyle.fillColor = Color.rgb(30,129,176)
                         }
-
-                        layer.defaultPolygonStyle.strokeColor = Color.rgb(65, 111, 181)
-                        layer.addLayerToMap()
-
-//                        layer.setOnFeatureClickListener { feature ->
-//                            val dialog = CustomDialogFragment(feature.getProperty("catatan"), feature.getProperty("pj"), feature.getProperty("created_at"))
-//                            dialog.show(supportFragmentManager, "CustomDialog")
-//                        }
-                        BottomSheetBehavior.from(binding.bottomSheet).apply {
-                            peekHeight = 280
-                            this.state = BottomSheetBehavior.STATE_COLLAPSED
+                        "quarter" -> {
+                            layer.defaultPolygonStyle.fillColor = Color.rgb(65, 111, 181)
                         }
+                        else -> {
+                            layer.defaultPolygonStyle.fillColor = Color.rgb(226,135,67)
+                        }
+                    }
 
-                    } else {
-                        binding.bottomSheet.visibility = View.GONE
-                        Toast.makeText(this@IrrigationActivity, "Seksi tidak tersambung dengan irigasi", Toast.LENGTH_LONG).show()
+                    layer.defaultPolygonStyle.strokeColor = Color.rgb(65, 111, 181)
+                    layer.addLayerToMap()
+                    binding.bottomSheet.visibility = View.VISIBLE
+                    binding.map.visibility = View.VISIBLE
+
+                    BottomSheetBehavior.from(binding.bottomSheet).apply {
+                        peekHeight = 280
+                        this.state = BottomSheetBehavior.STATE_COLLAPSED
                     }
 
                 } catch (e: Exception) {
-                    e.printStackTrace()
+                    showNoData()
                 }
             }
 
@@ -156,5 +159,17 @@ class IrrigationActivity : AppCompatActivity(), OnMapReadyCallback {
                 Toast.makeText(this@IrrigationActivity, errorMessage, Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
+    }
+
+    private fun showNoData() {
+        binding.dataNotFound.visibility = View.VISIBLE
+        binding.map.visibility = View.GONE
+        binding.bottomSheet.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
     }
 }

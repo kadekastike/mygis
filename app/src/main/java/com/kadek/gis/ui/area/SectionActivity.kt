@@ -35,6 +35,8 @@ class SectionActivity : AppCompatActivity() {
         binding = ActivitySectionBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         val factory = ViewModelFactory.getInstance()
         val viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
@@ -57,17 +59,21 @@ class SectionActivity : AppCompatActivity() {
 
         supportActionBar?.title = "$dataName Section List"
 
+        binding.dataNotFound.visibility = View.GONE
         binding.progressBar.visibility = View.VISIBLE
         viewModel.getSections(pgId, areaId, locationId).observe(this) {
             binding.progressBar.visibility = View.GONE
-            sectionAdapter.setSection(it)
-            sectionList.addAll(it)
-            sectionAdapter.notifyDataSetChanged()
+            if (it.isEmpty()) {
+                binding.dataNotFound.visibility = View.VISIBLE
+                binding.listArea.visibility = View.GONE
+            } else {
+                sectionAdapter.setSection(it)
+                sectionList.addAll(it)
+                sectionAdapter.notifyDataSetChanged()
+            }
         }
-
     }
     private fun performOptionMenuClick(position: Int) {
-        Log.d("OptionMENu", position.toString())
         val popupMenu = PopupMenu(this, binding.listArea[position].findViewById(R.id.textViewOptions))
         popupMenu.inflate(R.menu.option_menu)
         popupMenu.setOnMenuItemClickListener (object : PopupMenu.OnMenuItemClickListener {
@@ -106,8 +112,8 @@ class SectionActivity : AppCompatActivity() {
         popupMenu.show()
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        this.finish()
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
     }
 }

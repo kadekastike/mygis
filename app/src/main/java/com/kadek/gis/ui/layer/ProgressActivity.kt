@@ -1,18 +1,14 @@
 package com.kadek.gis.ui.layer
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -51,6 +47,11 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        binding.dataNotFound.visibility = View.GONE
+        binding.map.visibility = View.GONE
     }
 
     @SuppressLint("SetTextI18n")
@@ -67,26 +68,30 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
         binding.progressBar.bringToFront()
         binding.progressBar.visibility = View.VISIBLE
         viewModel.getDetailSection(sectionId).observe(this) { map ->
-            val newarkBounds = LatLngBounds(
-                LatLng(map.sw_latitude, map.sw_longitude), //south west (barat daya)
-                LatLng(map.ne_latitude, map.ne_longitude) // north east (timur laut)
-            )
-            executor.execute {
+            if (map.gambar_taksasi != null) {
+                val newarkBounds = LatLngBounds(
+                    LatLng(map.sw_latitude!!, map.sw_longitude!!), //south west (barat daya)
+                    LatLng(map.ne_latitude!!, map.ne_longitude!!) // north east (timur laut)
+                )
+                executor.execute {
 
-                val taksasi = getImage(this, map.gambar_taksasi)
-                val newarkLatLng = LatLng(map.sw_latitude, map.sw_longitude)
+                    val taksasi = getImage(this, map.gambar_taksasi!!)
+                    val newarkLatLng = LatLng(map.sw_latitude!!, map.sw_longitude!!)
 
-                handler.post {
-                    supportActionBar?.title = map.name + " Job Progress"
-                    groundOverlay = mMap.addGroundOverlay(
-                        GroundOverlayOptions()
-                            .positionFromBounds(newarkBounds)
-                            .image(BitmapDescriptorFactory.fromBitmap(taksasi)).anchor(1f, 0f)
-                    )
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newarkLatLng, 16f))
-                    binding.progressBar.visibility = View.GONE
+                    handler.post {
+                        supportActionBar?.title = map.name + " Job Progress"
+                        groundOverlay = mMap.addGroundOverlay(
+                            GroundOverlayOptions()
+                                .positionFromBounds(newarkBounds)
+                                .image(BitmapDescriptorFactory.fromBitmap(taksasi)).anchor(1f, 0f)
+                        )
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newarkLatLng, 16f))
+                    }
                 }
+            } else {
+                showError()
             }
+
         }
 
         val client = AsyncHttpClient()
@@ -104,25 +109,24 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
                         val dataArray = responseObject.getJSONObject("data")
                         val progressArray = dataArray.getJSONObject("progres")
 
-                        if (progressArray != null) {
-                            val geoJsonData: JSONObject = progressArray
+                        binding.map.visibility = View.VISIBLE
+                        val geoJsonData: JSONObject = progressArray
 
-                            val layer = GeoJsonLayer(mMap, geoJsonData)
+                        val layer = GeoJsonLayer(mMap, geoJsonData)
 
-                            layer.defaultPolygonStyle.fillColor = Color.rgb(65, 111, 181)
-                            layer.defaultPolygonStyle.strokeColor = Color.rgb(65, 111, 181)
-                            layer.addLayerToMap()
+                        layer.defaultPolygonStyle.fillColor = Color.rgb(65, 111, 181)
+                        layer.defaultPolygonStyle.strokeColor = Color.rgb(65, 111, 181)
+                        layer.addLayerToMap()
+                        binding.progressBar.visibility = View.GONE
 
-                            layer.setOnFeatureClickListener { feature ->
-                                val dialog = CustomDialogFragment(feature.getProperty("catatan"), feature.getProperty("pj"), feature.getProperty("created_at"))
-                                dialog.show(supportFragmentManager, "CustomDialog")
-                            }
-                        } else {
-                            Toast.makeText(this@ProgressActivity, "Tidak ada progress pekerjaan", Toast.LENGTH_SHORT).show()
+                        layer.setOnFeatureClickListener { feature ->
+                            val dialog = CustomDialogFragment(feature.getProperty("catatan"), feature.getProperty("pj"), feature.getProperty("created_at"))
+                            dialog.show(supportFragmentManager, "CustomDialog")
                         }
 
                     } catch (e: Exception) {
                         e.printStackTrace()
+                        showError()
                     }
             }
 
@@ -141,5 +145,15 @@ class ProgressActivity : AppCompatActivity(), OnMapReadyCallback {
                 Toast.makeText(this@ProgressActivity, errorMessage, Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
+    }
+    private fun showError() {
+        binding.dataNotFound.visibility = View.VISIBLE
+        binding.map.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
     }
 }

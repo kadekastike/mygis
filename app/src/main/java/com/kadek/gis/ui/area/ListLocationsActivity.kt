@@ -3,6 +3,7 @@ package com.kadek.gis.ui.area
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +28,8 @@ class ListLocationsActivity : AppCompatActivity() {
         binding = ActivityListDataAreaBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         val factory = ViewModelFactory.getInstance()
         val viewModel = ViewModelProvider(this, factory)[MainViewModel::class.java]
 
@@ -44,11 +47,25 @@ class ListLocationsActivity : AppCompatActivity() {
 
         supportActionBar?.title = "$dataName Location List"
 
+        binding.dataNotFound.visibility = View.GONE
         binding.progressBar.visibility = View.VISIBLE
-        viewModel.getLocations(pgId, areaId).observe(this, {
+        viewModel.getLocations(pgId, areaId).observe(this) {
+            Log.d("data", it.toString())
             binding.progressBar.visibility = View.GONE
-            locationAdapter.setArea(it)
-            locationAdapter.notifyDataSetChanged()
-        })
+
+            Log.d("dataArea", locationAdapter.setArea(it).toString())
+            if (it.isEmpty()) {
+                binding.listArea.visibility = View.GONE
+                binding.dataNotFound.visibility = View.VISIBLE
+            } else {
+                locationAdapter.setArea(it)
+                locationAdapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
     }
 }

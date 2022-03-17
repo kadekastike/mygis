@@ -55,25 +55,25 @@ class LayerWeather : AppCompatActivity(), OnMapReadyCallback {
 
         viewModel.getDetailSection(sectionId).observe(this) { map ->
 
-            val newarkLatLng = LatLng(map.sw_latitude, map.sw_longitude)
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newarkLatLng, 11f))
-
-            val weatherViewModel = ViewModelProvider(this, factory)[WeatherViewModel::class.java]
-
-            weatherViewModel.getWeather(map.sw_latitude, map.sw_longitude)
-
-            weatherViewModel.currentHumidity.observe(this) {
-                binding.humidityLevel.text = it.humidity.toString() + "%"
-            }
-            weatherViewModel.currentWeather.observe(this) {
-                it.map {
-                    binding.resWeather.text = it?.description
-                    val baseUrl = "http://openweathermap.org/img/wn/"
-                    Glide.with(this)
-                        .load(baseUrl + it?.icon + "@2x.png")
-                        .into(binding.imgWeather)
-                }
-            }
+//            val newarkLatLng = LatLng(map.sw_latitude, map.sw_longitude)
+//            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newarkLatLng, 11f))
+//
+//            val weatherViewModel = ViewModelProvider(this, factory)[WeatherViewModel::class.java]
+//
+//            weatherViewModel.getWeather(map.sw_latitude, map.sw_longitude)
+//
+//            weatherViewModel.currentHumidity.observe(this) {
+//                binding.humidityLevel.text = it.humidity.toString() + "%"
+//            }
+//            weatherViewModel.currentWeather.observe(this) {
+//                it.map {
+//                    binding.resWeather.text = it?.description
+//                    val baseUrl = "http://openweathermap.org/img/wn/"
+//                    Glide.with(this)
+//                        .load(baseUrl + it?.icon + "@2x.png")
+//                        .into(binding.imgWeather)
+//                }
+//            }
 
             val listWeatherAdapter = WeatherListAdapter()
 
@@ -83,10 +83,10 @@ class LayerWeather : AppCompatActivity(), OnMapReadyCallback {
                 adapter = listWeatherAdapter
             }
 
-            viewModel.getWeather(map.sw_latitude, map.sw_longitude).observe(this) {
-                listWeatherAdapter.setWeather(it)
-                listWeatherAdapter.notifyDataSetChanged()
-            }
+//            viewModel.getWeather(map.sw_latitude, map.sw_longitude).observe(this) {
+//                listWeatherAdapter.setWeather(it)
+//                listWeatherAdapter.notifyDataSetChanged()
+//            }
         }
 
         val tileProvider: TileProvider = object : UrlTileProvider(256, 256) {

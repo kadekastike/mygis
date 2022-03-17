@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -42,6 +43,12 @@ class LayerTaksasi : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        binding.dataNotFound.visibility = View.GONE
+        binding.bottomSheet.visibility = View.GONE
+        binding.map.visibility = View.GONE
     }
 
     @SuppressLint("SetTextI18n")
@@ -58,30 +65,39 @@ class LayerTaksasi : AppCompatActivity(), OnMapReadyCallback {
         binding.progressBar.bringToFront()
         binding.progressBar.visibility = View.VISIBLE
         viewModel.getDetailSection(sectionId).observe(this) { section ->
-            val newarkBounds = LatLngBounds(
-                LatLng(section.sw_latitude, section.sw_longitude), //south west (barat daya)
-                LatLng(section.ne_latitude, section.ne_longitude) // north east (timur laut)
-            )
-            executor.execute {
+            if (section.gambar_taksasi != null) {
+                binding.bottomSheet.visibility = View.VISIBLE
+                binding.map.visibility = View.VISIBLE
+                val newarkBounds = LatLngBounds(
+                    LatLng(section.sw_latitude!!, section.sw_longitude!!), //south west (barat daya)
+                    LatLng(section.ne_latitude!!, section.ne_longitude!!) // north east (timur laut)
+                )
+                executor.execute {
 
-                val taksasi = getImage(this, section.gambar_taksasi)
-                val newarkLatLng = LatLng(section.sw_latitude, section.sw_longitude)
+                    val taksasi = getImage(this, section.gambar_taksasi!!)
+                    val newarkLatLng = LatLng(section.sw_latitude!!, section.sw_longitude!!)
 
-                handler.post {
-                    supportActionBar?.title = section.name + " Taksasi"
-                    binding.ageResult.text = section.age
-                    binding.cropResult.text = section.crop + " crop"
-                    binding.varietyResult.text = section.variety
-                    binding.ft.text = section.forcing_time.toString()
+                    handler.post {
+                        supportActionBar?.title = section.name + " Taksasi"
+                        binding.ageResult.text = section.age
+                        binding.cropResult.text = section.crop + " crop"
+                        binding.varietyResult.text = section.variety
+                        binding.ft.text = section.forcing_time.toString()
 
-                    groundOverlay = mMap.addGroundOverlay(
-                        GroundOverlayOptions()
-                            .positionFromBounds(newarkBounds)
-                            .image(BitmapDescriptorFactory.fromBitmap(taksasi)).anchor(1f, 0f)
-                    )
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newarkLatLng, 16f))
-                    binding.progressBar.visibility = View.GONE
+                        groundOverlay = mMap.addGroundOverlay(
+                            GroundOverlayOptions()
+                                .positionFromBounds(newarkBounds)
+                                .image(BitmapDescriptorFactory.fromBitmap(taksasi)).anchor(1f, 0f)
+                        )
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newarkLatLng, 16f))
+                        binding.progressBar.visibility = View.GONE
+                    }
                 }
+            } else {
+                binding.map.visibility = View.GONE
+                binding.progressBar.visibility = View.GONE
+                binding.bottomSheet.visibility = View.GONE
+                binding.dataNotFound.visibility = View.VISIBLE
             }
 
         }
@@ -89,6 +105,11 @@ class LayerTaksasi : AppCompatActivity(), OnMapReadyCallback {
             peekHeight = 280
             this.state = BottomSheetBehavior.STATE_COLLAPSED
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
     }
 
 }
