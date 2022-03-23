@@ -114,18 +114,19 @@ class IrrigationActivity : AppCompatActivity(), OnMapReadyCallback {
                     val geometryData = irrigationObject.getJSONObject("geometry")
                     val geoJsonData: JSONObject = geometryData
 
-                    Log.d("GeometryData", geoJsonData.toString())
-
                     val layer = GeoJsonLayer(mMap, geoJsonData)
                     when (volume) {
                         "full" -> {
                             layer.defaultPolygonStyle.fillColor = Color.rgb(30,129,176)
                         }
-                        "quarter" -> {
+                        "half" -> {
                             layer.defaultPolygonStyle.fillColor = Color.rgb(65, 111, 181)
                         }
+                        "quarter" -> {
+                            layer.defaultPolygonStyle.fillColor = Color.rgb(255, 170, 5)
+                        }
                         else -> {
-                            layer.defaultPolygonStyle.fillColor = Color.rgb(226,135,67)
+                            layer.defaultPolygonStyle.fillColor = Color.rgb(255, 49, 5)
                         }
                     }
 
