@@ -32,12 +32,12 @@
         android:id="@+id/ndvi_legend"
         android:layout_width="323dp"
         android:layout_height="56dp"
-        android:layout_marginTop="650dp"
-        android:layout_marginStart="80dp"
-        android:foregroundGravity="left"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_gravity="bottom|right"
         android:scaleType="fitXY"
         android:src="@drawable/ndvi"
-        tools:ignore="ContentDescription" />
+        tools:ignore="ContentDescription,RtlHardcoded" />
 
     <LinearLayout
         android:id="@+id/data_not_found"

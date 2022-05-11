@@ -57,6 +57,7 @@ class RemoteDataSource {
     suspend fun getDetailSection(sectionId: Long, callback: loadMapDetailCallback){
         idlingResource.increment()
         ApiConfig.getApiService().getDetailSection(sectionId).await().let { section ->
+
             callback.onMapDetailReceived(section)
             idlingResource.decrement()
         }
