@@ -76,6 +76,8 @@ class ListAreaActivity : AppCompatActivity() {
             binding.humCard.visibility = View.GONE
             binding.smcard.visibility = View.GONE
             binding.tempCard.visibility = View.GONE
+            binding.txtHead.visibility = View.GONE
+            binding.title.visibility = View.GONE
         }
 
     }

@@ -27,6 +27,17 @@
         app:layout_constraintTop_toTopOf="@+id/list_area" />
 
         <TextView
+            android:id="@+id/txt_head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Micro-Climate Data"
+            android:layout_marginStart="15dp"
+            android:textColor="@color/black"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/sfuisemibold"
+            android:textSize="18sp"/>
+
+        <TextView
             android:id="@+id/text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,6 +46,7 @@
             android:textColor="@color/black"
             android:layout_marginTop="5dp"
             android:layout_marginStart="15dp"
+            android:layout_below="@+id/txt_head"
             android:text="Soil Moisture"/>
 
         <androidx.cardview.widget.CardView
@@ -146,8 +158,8 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
             android:layout_below="@id/temp_card"
+            android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
             android:fontFamily="@font/sfuisemibold"
             android:text="Area List"
